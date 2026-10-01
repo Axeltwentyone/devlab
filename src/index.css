@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --color-encre: #111111;
+  --color-pierre: #D9D4CC;
+  --color-bronze: #9C7A4E;
+  --color-fond: #F4F2EE;
+  --color-gris: #77726B;
+  --color-doux: #A8A29A;
+  --color-trait: #2A2A2A;
+  --font-sans: "Inter Tight", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sign: "Allura", "Brush Script MT", cursive;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+  body { @apply bg-white font-sans text-encre antialiased; }
+  ::selection { background: var(--color-bronze); color: white; }
+  :focus-visible { outline: 2px solid var(--color-bronze); outline-offset: 3px; border-radius: 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+/* Le curseur point bronze ne remplace la souris que sur un vrai pointeur */
+@media (pointer: fine) {
+  .has-dot-cursor, .has-dot-cursor * { cursor: none; }
+}
