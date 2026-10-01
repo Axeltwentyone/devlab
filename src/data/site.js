@@ -95,6 +95,22 @@ export const PLANS = [
   },
 ]
 
+// Section « Pourquoi devlab » : uniquement des engagements tenus ailleurs sur le site.
+export const REASONS = [
+  { title: 'Zéro surprise', text: 'Vous connaissez le prix et la date de livraison avant qu’on écrive la première ligne de code.' },
+  { title: 'Une réponse sous 24 h', text: 'Un seul interlocuteur, joignable sur WhatsApp, qui parle français et pas jargon.' },
+  { title: 'Pensé pour ici', text: 'Des sites et des apps faits pour les téléphones, les connexions et le Mobile Money de Côte d’Ivoire.' },
+  { title: 'On reste', text: 'Après la mise en ligne, on corrige, on fait évoluer et on vous conseille. Le projet ne s’arrête pas à la livraison.' },
+]
+
+// Section « La méthode devlab ». TODO : ajuster à ta façon de travailler.
+export const STEPS = [
+  { title: 'Un message', text: 'Vous nous écrivez sur WhatsApp. On répond sous 24 h et on cale un appel pour comprendre votre activité.' },
+  { title: 'Un prix clair', text: 'On fixe ensemble le contenu, le prix et la date de livraison. Rien ne change ensuite sans votre accord.' },
+  { title: 'On construit', text: 'Vous voyez l’avancement et validez chaque étape, directement depuis votre téléphone.' },
+  { title: 'En ligne, et on reste', text: 'Mise en ligne, prise en main, puis corrections et évolutions quand vous en avez besoin.' },
+]
+
 export const EXPERTISE = [
   'Sites vitrines',
   'Applications mobiles',

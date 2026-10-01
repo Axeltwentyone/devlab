@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 // Écran d'entrée : le texte se tape lentement, lettre par lettre, puis le rideau se lève.
-const TEXT = 'devlab'
+const TEXT = 'Bienvenue dans le lab'
 const TYPE_DELAY = 180 // ms par lettre — volontairement lent
 const START_DELAY = 400
 const HOLD = 900 // pause une fois le mot complet

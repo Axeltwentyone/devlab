@@ -3,6 +3,8 @@ import Logo from './Logo.jsx'
 import { whatsappLink } from '../data/site.js'
 
 const LINKS = [
+  { href: '#pourquoi', label: 'Pourquoi nous' },
+  { href: '#methode', label: 'Méthode' },
   { href: '#index', label: 'Projets' },
   { href: '#diagnostic', label: 'Diagnostic' },
   { href: '#formules', label: 'Formules' },
@@ -35,7 +37,7 @@ export default function TopBar() {
           <span className="font-medium text-encre">Abidjan</span> <time>{time}</time>
         </p>
 
-        <nav className="hidden items-center gap-9 text-sm md:flex" aria-label="Navigation principale">
+        <nav className="hidden items-center gap-8 text-sm lg:flex" aria-label="Navigation principale">
           {LINKS.map((l) => (
             <a key={l.href} href={l.href} className="transition-opacity hover:opacity-60">{l.label}</a>
           ))}
@@ -46,7 +48,7 @@ export default function TopBar() {
 
         <button
           type="button"
-          className="text-[13px] font-medium md:hidden"
+          className="text-[13px] font-medium lg:hidden"
           aria-expanded={open}
           aria-controls="menu-mobile"
           onClick={() => setOpen((o) => !o)}
@@ -56,7 +58,7 @@ export default function TopBar() {
       </div>
 
       {open && (
-        <nav id="menu-mobile" className="border-t border-fond px-5 pb-8 pt-4 md:hidden" aria-label="Navigation mobile">
+        <nav id="menu-mobile" className="border-t border-fond px-5 pb-8 pt-4 lg:hidden" aria-label="Navigation mobile">
           <ul className="flex flex-col">
             {LINKS.map((l) => (
               <li key={l.href}>
