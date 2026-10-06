@@ -260,6 +260,19 @@ function MobileStage() {
 
   const open = sheet && PROJECTS.find((x) => x.id === sheet)
 
+  // Glisser à gauche / à droite sur les écrans : projet suivant / précédent
+  const touch = useRef(null)
+  const onTouchStart = (e) => { touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY } }
+  const onTouchEnd = (e) => {
+    if (!touch.current) return
+    const dx = e.changedTouches[0].clientX - touch.current.x
+    const dy = e.changedTouches[0].clientY - touch.current.y
+    touch.current = null
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      goTo(Math.min(PROJECTS.length - 1, Math.max(0, index + (dx < 0 ? 1 : -1))))
+    }
+  }
+
   return (
     <div ref={ref} className="relative lg:hidden" style={{ height: `${PROJECTS.length * 100}svh` }}>
       <div
@@ -293,46 +306,84 @@ function MobileStage() {
           </div>
         </div>
 
-        {/* Écrans en éventail, en fondu d'un projet à l'autre */}
-        <div className="relative min-h-0 flex-1">
+        {/* Scène : l'univers du projet (halo + nom géant) et ses écrans, qui glissent d'un projet à l'autre */}
+        <div className="relative min-h-0 flex-1" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
           {PROJECTS.map((x, i) => {
             const active = i === index
+            const side = i < index ? -1 : i > index ? 1 : 0
+            const local = Math.min(1, Math.max(0, progress * PROJECTS.length - i))
             const shots = x.images.slice(0, 3)
-            const fan = shots.length === 3
-              ? [{ r: -8, y: 18, z: 0 }, { r: 0, y: -6, z: 10 }, { r: 8, y: 18, z: 0 }]
-              : [{ r: -5, y: 10, z: 0 }, { r: 5, y: -4, z: 10 }]
+            // Écran central en avant, les autres en retrait de chaque côté
+            const layout = shots.length >= 3
+              ? [{ x: -27, y: 6, r: -9, s: 0.78, z: 0 }, { x: 0, y: -2, r: 0, s: 1, z: 10 }, { x: 27, y: 6, r: 9, s: 0.78, z: 0 }]
+              : shots.length === 2
+                ? [{ x: -15, y: 3, r: -6, s: 0.86, z: 0 }, { x: 15, y: -1, r: 5, s: 1, z: 10 }]
+                : [{ x: 0, y: 0, r: 0, s: 1, z: 10 }]
+            const order = shots.length >= 3 ? [shots[1], shots[0], shots[2]] : shots
+            const placed = shots.length >= 3 ? [layout[1], layout[0], layout[2]] : layout
             return (
-              <div
-                key={x.id}
-                aria-hidden={!active}
-                className="absolute inset-0 flex items-center justify-center transition-opacity duration-500"
-                style={{ opacity: active ? 1 : 0 }}
-              >
-                {shots.length ? (
-                  shots.map((img, k) => (
-                    <div
-                      key={img}
-                      className="-mx-[4vw] transition-all duration-700 ease-[cubic-bezier(.2,.7,.2,1)]"
-                      style={{
-                        zIndex: fan[k].z,
-                        transitionDelay: active ? `${100 + k * 90}ms` : '0ms',
-                        transform: active ? `translateY(${fan[k].y}px) rotate(${fan[k].r}deg)` : 'translateY(70px) rotate(0deg)',
-                      }}
-                    >
-                      <Phone src={IMAGES[img]} alt={active ? ALT[img] : ''} className="w-[min(33vw,calc(34svh*0.4615),11rem)]" />
-                    </div>
-                  ))
+              <div key={x.id} aria-hidden={!active} className="absolute inset-0">
+                {/* Halo aux couleurs du projet */}
+                <div
+                  className="absolute inset-0 transition-opacity duration-700"
+                  style={{ opacity: active ? 1 : 0, background: `radial-gradient(60% 45% at 50% 50%, ${x.theme.accent}55, transparent 70%)` }}
+                />
+                {/* Nom géant en filigrane, qui glisse avec le scroll */}
+                <div
+                  className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 whitespace-nowrap text-[34vw] font-extrabold leading-none tracking-[-0.06em] transition-opacity duration-700"
+                  style={{ opacity: active ? 0.07 : 0, transform: `translate(${10 - local * 45}%, -50%)` }}
+                >
+                  {x.name}
+                </div>
+
+                {order.length ? (
+                  order.map((img, k) => {
+                    const l = placed[k]
+                    const tx = side ? side * 110 : l.x
+                    return (
+                      <div
+                        key={img}
+                        className="absolute left-1/2 top-1/2 transition-[transform,opacity] duration-700 ease-[cubic-bezier(.2,.7,.2,1)]"
+                        style={{
+                          zIndex: l.z,
+                          opacity: active ? 1 : 0,
+                          transitionDelay: active ? `${k * 70}ms` : '0ms',
+                          transform: `translate(-50%, -50%) translate(${tx}vw, ${l.y}%) rotate(${side ? side * 12 : l.r}deg) scale(${l.s})`,
+                        }}
+                      >
+                        <Phone src={IMAGES[img]} alt={active ? ALT[img] : ''} className="w-[min(46vw,calc(44svh*0.4615),15rem)]" />
+                      </div>
+                    )
+                  })
                 ) : (
-                  <Phone className="w-[min(40vw,calc(34svh*0.4615),11rem)]">
-                    <div className="flex h-full flex-col items-center justify-center gap-2 px-3 text-center" style={{ background: x.theme.card }}>
-                      <span className="text-5xl font-extrabold" style={{ color: x.theme.accent }}>?</span>
-                      <span className="text-[11px]" style={{ color: x.theme.muted }}>Votre écran ici</span>
+                  // Votre projet : un écran à dessiner ensemble
+                  <div
+                    className="absolute left-1/2 top-1/2 transition-[transform,opacity] duration-700 ease-[cubic-bezier(.2,.7,.2,1)]"
+                    style={{ opacity: active ? 1 : 0, transform: `translate(-50%, -50%) translateX(${side * 110}vw)` }}
+                  >
+                    <div
+                      className="flex aspect-[9/19.5] w-[min(46vw,calc(44svh*0.4615),15rem)] flex-col items-center justify-center gap-3 rounded-[2.2rem] border-2 border-dashed text-center"
+                      style={{ borderColor: x.theme.accent }}
+                    >
+                      <span className="flex size-14 items-center justify-center rounded-full text-3xl font-light text-white" style={{ background: x.theme.accent }}>+</span>
+                      <span className="px-4 text-sm" style={{ color: x.theme.muted }}>Votre app ici</span>
                     </div>
-                  </Phone>
+                  </div>
                 )}
               </div>
             )
           })}
+
+          {/* Indication au tout début : il faut faire défiler */}
+          <p
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-2 flex justify-center text-xs transition-opacity duration-500"
+            style={{ opacity: progress < 0.06 ? 1 : 0, color: t.muted }}
+          >
+            <span className="flex items-center gap-2 rounded-full px-3 py-1.5" style={{ boxShadow: `inset 0 0 0 1px ${t.line}` }}>
+              Faites défiler <span className="animate-bounce">↓</span>
+            </span>
+          </p>
         </div>
 
         {/* Le projet en cours */}
@@ -352,7 +403,7 @@ function MobileStage() {
                 <h3 className="mt-2 text-[clamp(2.6rem,13vw,4.5rem)] font-extrabold leading-[0.9] tracking-[-0.05em]">
                   <TitleWithDot name={x.name} color={x.theme.accent} />
                 </h3>
-                <p className="mt-2 text-lg font-light" style={{ color: x.theme.muted }}>{x.tagline}</p>
+                <p className="mt-3 line-clamp-3 text-[15px] font-light leading-relaxed" style={{ color: x.theme.muted }}>{x.summary}</p>
                 <div className="mt-5 flex flex-wrap items-center gap-3">
                   {x.href ? (
                     <a href={x.href} tabIndex={active ? 0 : -1} className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium text-white" style={{ background: x.theme.accent }}>

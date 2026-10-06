@@ -7,7 +7,6 @@ import Method from './components/Method.jsx'
 import Diagnostic from './components/Diagnostic.jsx'
 import Expertise from './components/Expertise.jsx'
 import Plans from './components/Plans.jsx'
-import NextProject from './components/NextProject.jsx'
 import Closing from './components/Closing.jsx'
 import Cursor from './components/Cursor.jsx'
 import Loader, { introSeen } from './components/Loader.jsx'
@@ -38,7 +37,6 @@ export default function App() {
             <Diagnostic />
             <Expertise />
             <Plans />
-            <NextProject />
           </main>
           <Closing />
           <Cursor />

@@ -1,33 +1,19 @@
 import { Dot } from './Logo.jsx'
 import { useEffect, useState } from 'react'
 import { AVAILABILITY, HOURS, NOW, whatsappLink } from '../data/site.js'
-
-// Heure d'Abidjan (UTC+0, pas d'heure d'été) mise à jour chaque seconde
-function useAbidjanClock() {
-  const read = () => {
-    const d = new Date()
-    return { h: d.getUTCHours(), m: d.getUTCMinutes(), s: d.getUTCSeconds(), day: d.getUTCDay() }
-  }
-  const [now, setNow] = useState(read)
-  useEffect(() => {
-    const id = setInterval(() => setNow(read()), 1000)
-    return () => clearInterval(id)
-  }, [])
-  return now
-}
+import useAbidjanClock from '../hooks/useAbidjanClock.js'
 
 const pad = (n) => String(n).padStart(2, '0')
 
 // Bande « en direct » : ce qu'on fait maintenant, l'heure au studio, les places restantes.
 function LiveStatus() {
-  const { h, m, s, day } = useAbidjanClock()
+  const { h, m, s, open } = useAbidjanClock()
   const [i, setI] = useState(0)
   useEffect(() => {
     if (NOW.length < 2) return
     const id = setInterval(() => setI((x) => (x + 1) % NOW.length), 3800)
     return () => clearInterval(id)
   }, [])
-  const open = HOURS.days.includes(day) && h >= HOURS.open && h < HOURS.close
 
   return (
     <div className="mt-12 grid gap-6 border-t border-encre pt-5 sm:grid-cols-[minmax(0,1.6fr)_1fr_1fr] sm:gap-10 md:mt-24 md:max-w-5xl">

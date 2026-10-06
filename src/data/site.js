@@ -95,9 +95,11 @@ export const PLANS = [
   {
     id: 'vitrine',
     name: 'Site vitrine',
+    pitch: 'Pour être trouvé sur Google et contacté.',
     price: '150 000',
     unit: 'FCFA',
     delay: '2 à 3 semaines',
+    weeks: [2, 3],
     features: [
       'Quelques pages claires sur votre activité',
       'Bien référencé sur Google',
@@ -108,8 +110,11 @@ export const PLANS = [
   {
     id: 'ecommerce',
     name: 'Boutique en ligne',
+    pitch: 'Pour vendre en ligne et encaisser en Mobile Money.',
     price: 'Sur devis',
     delay: '6 à 8 semaines',
+    weeks: [6, 8],
+    reference: { name: 'Tiakolisé', href: 'https://tiakoliseetfier.com' },
     features: [
       'Catalogue et gestion des commandes',
       'Paiement Mobile Money intégré',
@@ -119,8 +124,11 @@ export const PLANS = [
   {
     id: 'app',
     name: 'Application mobile',
+    pitch: 'Pour un service que vos clients utilisent chaque jour.',
     price: 'Sur devis',
     delay: '8 à 12 semaines',
+    weeks: [8, 12],
+    reference: { name: 'ShopTonGba', href: '#index' },
     features: [
       'iOS et Android, une seule base de code',
       'Back-office pour gérer vos données',
@@ -130,11 +138,12 @@ export const PLANS = [
 ]
 
 // Section « Pourquoi devlab » : uniquement des engagements tenus ailleurs sur le site.
+// Section « Pourquoi le lab » : ce qu'on voit souvent ailleurs, face à ce qu'on fait au lab.
 export const REASONS = [
-  { title: 'Zéro surprise', text: 'Vous connaissez le prix et la date de livraison avant qu’on écrive la première ligne de code.' },
-  { title: 'Une réponse sous 24 h', text: 'Un seul interlocuteur, joignable sur WhatsApp, qui parle français et pas jargon.' },
-  { title: 'Pensé pour ici', text: 'Des sites et des apps faits pour les téléphones, les connexions et le Mobile Money de Côte d’Ivoire.' },
-  { title: 'On reste', text: 'Après la mise en ligne, on corrige, on fait évoluer et on vous conseille. Le projet ne s’arrête pas à la livraison.' },
+  { title: 'Zéro surprise', them: 'Un devis flou, des frais qui s’ajoutent, une date qui glisse.', us: 'Le prix et la date de livraison sont fixés avant la première ligne de code.' },
+  { title: 'Une réponse sous 24 h', them: 'Des mails sans réponse et trois interlocuteurs différents.', us: 'Un seul interlocuteur sur WhatsApp, qui parle français et pas jargon.' },
+  { title: 'Pensé pour ici', them: 'Un modèle importé, lourd, qui ignore le Mobile Money.', us: 'Fait pour les téléphones, les connexions et les paiements de Côte d’Ivoire.' },
+  { title: 'On reste', them: 'Livré, facturé, injoignable.', us: 'Après la mise en ligne, on corrige, on fait évoluer et on vous conseille.' },
 ]
 
 // Section « La méthode devlab ». TODO : ajuster à ta façon de travailler.
@@ -145,9 +154,11 @@ export const STEPS = [
   { title: 'En ligne, et on reste', text: 'Mise en ligne, prise en main, puis corrections et évolutions quand vous en avez besoin.' },
 ]
 
+// Section « Savoir-faire » : une ligne par expertise, avec ses outils et un projet qui le prouve.
 export const EXPERTISE = [
-  'Sites vitrines',
-  'Applications mobiles',
-  'Boutiques en ligne & Mobile Money',
-  'Équipe tech externalisée',
+  { name: 'Sites vitrines', text: 'Des pages rapides, trouvées sur Google, qui donnent envie de vous écrire.', tags: ['React', 'Référencement Google', 'WhatsApp'] },
+  { name: 'Applications mobiles', text: 'iOS et Android avec une seule base de code.', tags: ['Flutter', 'iOS', 'Android'], proof: 'ShopTonGba, Subci' },
+  { name: 'Boutiques en ligne & Mobile Money', text: 'Catalogue, stock, commandes et paiement local.', tags: ['Wave', 'Orange Money', 'GeniusPay'], proof: 'Tiakolisé' },
+  { name: 'Équipe tech externalisée', text: 'Maintenance, évolutions et conseil au mois, avec un interlocuteur unique.', tags: ['Maintenance', 'Évolutions', 'Conseil'] },
 ]
+
