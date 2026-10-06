@@ -1,5 +1,78 @@
 import { Dot } from './Logo.jsx'
-import { AVAILABILITY } from '../data/site.js'
+import { useEffect, useState } from 'react'
+import { AVAILABILITY, HOURS, NOW, whatsappLink } from '../data/site.js'
+
+// Heure d'Abidjan (UTC+0, pas d'heure d'été) mise à jour chaque seconde
+function useAbidjanClock() {
+  const read = () => {
+    const d = new Date()
+    return { h: d.getUTCHours(), m: d.getUTCMinutes(), s: d.getUTCSeconds(), day: d.getUTCDay() }
+  }
+  const [now, setNow] = useState(read)
+  useEffect(() => {
+    const id = setInterval(() => setNow(read()), 1000)
+    return () => clearInterval(id)
+  }, [])
+  return now
+}
+
+const pad = (n) => String(n).padStart(2, '0')
+
+// Bande « en direct » : ce qu'on fait maintenant, l'heure au studio, les places restantes.
+function LiveStatus() {
+  const { h, m, s, day } = useAbidjanClock()
+  const [i, setI] = useState(0)
+  useEffect(() => {
+    if (NOW.length < 2) return
+    const id = setInterval(() => setI((x) => (x + 1) % NOW.length), 3800)
+    return () => clearInterval(id)
+  }, [])
+  const open = HOURS.days.includes(day) && h >= HOURS.open && h < HOURS.close
+
+  return (
+    <div className="mt-12 grid gap-6 border-t border-encre pt-5 sm:grid-cols-[minmax(0,1.6fr)_1fr_1fr] sm:gap-10 md:mt-24 md:max-w-5xl">
+      <div className="min-w-0">
+        <p className="flex items-center gap-2 text-xs font-medium text-gris">
+          <span aria-hidden="true" className="relative flex size-2">
+            <span className="absolute inset-0 animate-ping rounded-full bg-bronze opacity-60" />
+            <span className="relative size-2 rounded-full bg-bronze" />
+          </span>
+          En ce moment au studio
+        </p>
+        <p className="relative mt-1 h-[1.5em] overflow-hidden text-[15px]" aria-live="polite">
+          {NOW.map((line, k) => (
+            <span
+              key={line}
+              aria-hidden={k !== i}
+              className="absolute inset-0 truncate transition-all duration-500 ease-[cubic-bezier(.2,.7,.2,1)]"
+              style={{ opacity: k === i ? 1 : 0, transform: `translateY(${k === i ? 0 : k === (i + NOW.length - 1) % NOW.length ? -100 : 100}%)` }}
+            >
+              {line}
+            </span>
+          ))}
+        </p>
+      </div>
+
+      <div>
+        <p className="text-xs font-medium text-gris">Abidjan</p>
+        <p className="mt-1 text-[15px] tabular-nums">
+          {pad(h)}:{pad(m)}<span className="text-doux">:{pad(s)}</span>
+          <span className="ml-2 text-gris">· {open ? 'Studio ouvert' : `Fermé, réouverture ${HOURS.open} h`}</span>
+        </p>
+      </div>
+
+      <div>
+        <p className="text-xs font-medium text-gris">Disponibilité</p>
+        <p className="mt-1 flex flex-wrap items-baseline gap-x-3 text-[15px]">
+          {AVAILABILITY}
+          <a href={whatsappLink('Bonjour DevLab ! J’aimerais réserver une place pour mon projet.')} target="_blank" rel="noreferrer" className="border-b border-encre text-sm font-medium transition-colors hover:border-bronze hover:text-bronze">
+            Réserver ↗
+          </a>
+        </p>
+      </div>
+    </div>
+  )
+}
 
 const LINES = ['On construit des', 'produits numériques', 'qui tiennent']
 
@@ -17,23 +90,7 @@ export default function Hero() {
         ))}
       </h1>
 
-      <dl className="mt-12 grid gap-6 border-t border-encre pt-5 sm:grid-cols-3 md:mt-24 md:max-w-4xl">
-        <div>
-          <dt className="text-xs font-medium text-gris">Studio</dt>
-          <dd className="mt-1 text-[15px]">Web &amp; mobile, Abidjan</dd>
-        </div>
-        <div>
-          <dt className="text-xs font-medium text-gris">Approche</dt>
-          <dd className="mt-1 text-[15px]">Partenaire, pas prestataire</dd>
-        </div>
-        <div>
-          <dt className="text-xs font-medium text-gris">Disponibilité</dt>
-          <dd className="mt-1 flex items-center gap-2 text-[15px]">
-            <span aria-hidden="true" className="size-2 rounded-full bg-bronze" />
-            {AVAILABILITY}
-          </dd>
-        </div>
-      </dl>
+      <LiveStatus />
 
       <style>{`
         .hero-line { transform: translateY(105%); animation: hero-rise 900ms cubic-bezier(.2,.7,.1,1) forwards; }

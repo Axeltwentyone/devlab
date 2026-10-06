@@ -47,7 +47,7 @@ export const RECOMMENDATIONS = {
     text: 'Catalogue, commandes et paiement Mobile Money intégré via GeniusPay. Vous gérez tout depuis votre téléphone.',
     delay: '6 à 8 semaines',
     plan: 'Boutique en ligne',
-    price: 'Dès 450 000 FCFA',
+    price: 'Sur devis',
   },
   app: {
     title: 'Une application iOS et Android',

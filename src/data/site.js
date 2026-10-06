@@ -9,7 +9,18 @@ export const SOCIALS = [
   { label: 'LinkedIn', href: '#' }, // TODO : lien LinkedIn
 ]
 
-export const AVAILABILITY = '2 projets ce trimestre'
+export const AVAILABILITY = '2 places ce trimestre'
+
+// Statut en direct du Hero : ce qui tourne au studio en ce moment (défile tout seul).
+// TODO : garder ces lignes à jour, elles doivent rester vraies.
+export const NOW = [
+  'On construit Subci, l’app d’abonnements partagés',
+  'On suit les précommandes de Tiakolisé',
+  'On fait évoluer ShopTonGba',
+]
+
+// Horaires du studio, heure d'Abidjan. TODO : vérifier.
+export const HOURS = { open: 8, close: 19, days: [1, 2, 3, 4, 5, 6] } // lundi → samedi
 
 export const PROJECTS = [
   {
@@ -18,6 +29,9 @@ export const PROJECTS = [
     kind: 'Application mobile · Flutter',
     year: '2026',
     status: 'Livré',
+    // Univers du projet : la section prend ces couleurs quand le projet est à l'écran
+    theme: { bg: '#161414', fg: '#F4F0EA', muted: 'rgba(244,240,234,0.55)', line: 'rgba(244,240,234,0.14)', accent: '#C8102E', card: '#262222' },
+    tagline: 'Une voiture. Maintenant.',
     summary: 'Location de véhicules à Abidjan : réservation en quelques secondes, paiement Mobile Money.',
     images: ['shoptongba-onboarding', 'shoptongba-accueil'],
     // TODO : vérifier ces textes et ajouter un vrai chiffre (utilisateurs, réservations, délai de livraison…)
@@ -33,6 +47,8 @@ export const PROJECTS = [
     kind: 'Application mobile',
     year: '2026',
     status: 'En cours',
+    theme: { bg: '#F3F1EC', fg: '#141414', muted: '#77726B', line: 'rgba(20,20,20,0.12)', accent: '#F26B3A', card: '#FFFFFF' },
+    tagline: 'Vos abonnements, à plusieurs.',
     summary: 'Acheter et partager ses abonnements à plusieurs, simplement, en Côte d’Ivoire.',
     images: ['subci-accueil', 'subci-explorer', 'subci-abonnements', 'subci-offre'],
     // TODO : vérifier ces textes et ajouter un vrai chiffre quand il y en aura
@@ -43,11 +59,31 @@ export const PROJECTS = [
     },
   },
   {
+    id: 'tiakolise',
+    name: 'Tiakolisé',
+    kind: 'Site e-commerce · Précommande',
+    year: '2026',
+    status: 'En ligne',
+    url: 'https://tiakoliseetfier.com',
+    theme: { bg: '#B9532A', fg: '#FBF1E6', muted: 'rgba(251,241,230,0.72)', line: 'rgba(251,241,230,0.28)', accent: '#1B110E', card: '#1B110E' },
+    tagline: 'Fait par nous, pour nous.',
+    summary: 'La boutique de précommande des t-shirts « Tiakolisé et fiers », la série limitée de la communauté de Tiakola.',
+    images: ['tiakolise-produit', 'tiakolise-passion', 'tiakolise-collection'],
+    // TODO : vérifier ces textes et ajouter un vrai chiffre (pièces vendues, commandes…)
+    caseStudy: {
+      problem: 'Vendre une série limitée à une communauté de fans, sans passer par les DM ni perdre le fil des stocks.',
+      solution: 'Un site où l’on choisit sa pièce et sa taille, voit les stocks restants, paie avec Wave et se fait livrer par Yango.',
+      facts: ['Paiement Wave', 'Livraison Yango à Abidjan', 'Stock en temps réel'],
+    },
+  },
+  {
     id: 'vous',
     name: 'Votre projet',
     kind: '—',
     year: '—',
     status: 'Ouvert',
+    theme: { bg: '#111111', fg: '#F4F2EE', muted: '#A8A29A', line: 'rgba(244,242,238,0.14)', accent: '#9C7A4E', card: '#1C1C1C' },
+    tagline: 'La prochaine app, c’est la vôtre.',
     summary: 'Trois questions pour savoir ce dont vous avez besoin.',
     href: '#diagnostic',
     images: [],
@@ -72,9 +108,7 @@ export const PLANS = [
   {
     id: 'ecommerce',
     name: 'Boutique en ligne',
-    from: true,
-    price: '450 000',
-    unit: 'FCFA',
+    price: 'Sur devis',
     delay: '6 à 8 semaines',
     features: [
       'Catalogue et gestion des commandes',
