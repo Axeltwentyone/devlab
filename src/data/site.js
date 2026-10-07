@@ -77,6 +77,24 @@ export const PROJECTS = [
     },
   },
   {
+    id: 'teamhub',
+    name: 'TeamHub',
+    kind: 'Application web & mobile · RH',
+    year: '2026',
+    status: 'En conception',
+    theme: { bg: '#E9EEF5', fg: '#0E1A2B', muted: '#5B6676', line: 'rgba(14,26,43,0.12)', accent: '#2F5BEA', card: '#FFFFFF' },
+    tagline: 'Toute l’équipe, au même endroit.',
+    summary: 'Pour YesWeCange : pointage, présences, congés et suivi RH réunis dans une seule application.',
+    // Pas encore de captures : les écrans sont dessinés en code (components/TeamHubScreens.jsx).
+    // TODO : remplacer par de vraies captures quand l'interface sera conçue.
+    images: ['teamhub-pointage', 'teamhub-equipe', 'teamhub-conge'],
+    caseStudy: {
+      problem: 'Présences, congés et absences suivis à la main, à plusieurs endroits : peu de visibilité et beaucoup de vérifications.',
+      solution: 'Une app où chacun pointe en un clic et demande ses congés, et où le manager valide et suit son équipe en temps réel.',
+      facts: ['Pointage ordinateur & mobile', 'Congés validés en quelques clics', 'Exports Excel, CSV, PDF'],
+    },
+  },
+  {
     id: 'vous',
     name: 'Votre projet',
     kind: '—',
@@ -138,12 +156,12 @@ export const PLANS = [
 ]
 
 // Section « Pourquoi devlab » : uniquement des engagements tenus ailleurs sur le site.
-// Section « Pourquoi le lab » : ce qu'on voit souvent ailleurs, face à ce qu'on fait au lab.
+// Section « Pourquoi le lab » : quatre engagements, chacun avec son visuel.
 export const REASONS = [
-  { title: 'Zéro surprise', them: 'Un devis flou, des frais qui s’ajoutent, une date qui glisse.', us: 'Le prix et la date de livraison sont fixés avant la première ligne de code.' },
-  { title: 'Une réponse sous 24 h', them: 'Des mails sans réponse et trois interlocuteurs différents.', us: 'Un seul interlocuteur sur WhatsApp, qui parle français et pas jargon.' },
-  { title: 'Pensé pour ici', them: 'Un modèle importé, lourd, qui ignore le Mobile Money.', us: 'Fait pour les téléphones, les connexions et les paiements de Côte d’Ivoire.' },
-  { title: 'On reste', them: 'Livré, facturé, injoignable.', us: 'Après la mise en ligne, on corrige, on fait évoluer et on vous conseille.' },
+  { id: 'prix', title: 'Zéro surprise', text: 'Le prix et la date de livraison sont fixés avant la première ligne de code.' },
+  { id: 'reponse', title: 'Une réponse sous 24 h', text: 'Un seul interlocuteur sur WhatsApp, qui parle français et pas jargon.' },
+  { id: 'ici', title: 'Pensé pour ici', text: 'Fait pour les téléphones, les connexions et les paiements de Côte d’Ivoire.' },
+  { id: 'reste', title: 'On reste', text: 'Après la mise en ligne, on corrige, on fait évoluer et on vous conseille.' },
 ]
 
 // Section « La méthode devlab ». TODO : ajuster à ta façon de travailler.

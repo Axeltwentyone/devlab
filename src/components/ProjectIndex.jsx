@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Dot } from './Logo.jsx'
 import Phone from './Phone.jsx'
+import { TEAMHUB_SCREENS } from './TeamHubScreens.jsx'
 import { PROJECTS } from '../data/site.js'
 import shoptongbaOnboarding from '../assets/shoptongba-onboarding.webp'
 import shoptongbaAccueil from '../assets/shoptongba-accueil.webp'
@@ -33,6 +34,22 @@ const ALT = {
   'tiakolise-produit': 'Tiakolisé : fiche du t-shirt Mélo Décalé, tailles et prix',
   'tiakolise-passion': 'Tiakolisé : « Plus qu’une passion », la série limitée',
   'tiakolise-collection': 'Tiakolisé : stocks restants et la collection complète',
+  'teamhub-pointage': 'TeamHub : pointer son arrivée en un clic, heures et congés restants',
+  'teamhub-equipe': 'TeamHub : qui est présent, en retard ou absent aujourd’hui',
+  'teamhub-conge': 'TeamHub : suivi d’une demande de congé jusqu’à l’approbation',
+}
+
+// Un écran de projet : une capture, ou un écran dessiné en code quand il n'y en a pas encore.
+function Shot({ id, alt = ALT[id], className = '' }) {
+  const Drawn = TEAMHUB_SCREENS[id]
+  if (Drawn) {
+    return (
+      <Phone className={className}>
+        <div role="img" aria-label={alt} className="h-full w-full"><Drawn /></div>
+      </Phone>
+    )
+  }
+  return <Phone src={IMAGES[id]} alt={alt} className={className} />
 }
 
 const num = (i) => String(i + 1).padStart(2, '0')
@@ -85,7 +102,14 @@ function Thumb({ p, i, active, onSelect }) {
         {p.name}
         <span className="ml-[0.08em] inline-block size-[0.3em] rounded-full" style={{ background: t.accent }} />
       </span>
-      {cover ? (
+      {cover && TEAMHUB_SCREENS[cover] ? (
+        <span
+          aria-hidden="true"
+          className={`absolute -bottom-10 right-4 w-24 rotate-[-6deg] transition-transform duration-700 ${active ? 'translate-y-0' : 'translate-y-10'}`}
+        >
+          <Shot id={cover} alt="" className="w-24" />
+        </span>
+      ) : cover ? (
         <img
           src={IMAGES[cover]}
           alt=""
@@ -155,7 +179,7 @@ function Phones({ p, active, className = '' }) {
             translate: active ? '0 0' : '0 60px',
           }}
         >
-          <Phone src={IMAGES[img]} alt={ALT[img]} className="w-36 2xl:w-40" />
+          <Shot id={img} className="w-36 2xl:w-40" />
         </div>
       ))}
     </div>
@@ -351,7 +375,7 @@ function MobileStage() {
                           transform: `translate(-50%, -50%) translate(${tx}vw, ${l.y}%) rotate(${side ? side * 12 : l.r}deg) scale(${l.s})`,
                         }}
                       >
-                        <Phone src={IMAGES[img]} alt={active ? ALT[img] : ''} className="w-[min(46vw,calc(44svh*0.4615),15rem)]" />
+                        <Shot id={img} alt={active ? ALT[img] : ''} className="w-[min(46vw,calc(44svh*0.4615),15rem)]" />
                       </div>
                     )
                   })
@@ -455,7 +479,7 @@ function MobileStage() {
             <Facts p={open} />
             <div className="-mx-5 mt-8 flex gap-3 overflow-x-auto px-5 pb-2">
               {open.images.map((img) => (
-                <Phone key={img} src={IMAGES[img]} alt={ALT[img]} className="w-36 shrink-0" />
+                <Shot key={img} id={img} className="w-36 shrink-0" />
               ))}
             </div>
             {open.url && <SiteLink url={open.url} className="mt-8 inline-block" />}
