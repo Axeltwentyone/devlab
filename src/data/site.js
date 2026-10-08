@@ -77,24 +77,6 @@ export const PROJECTS = [
     },
   },
   {
-    id: 'teamhub',
-    name: 'TeamHub',
-    kind: 'Application web & mobile · RH',
-    year: '2026',
-    status: 'En conception',
-    theme: { bg: '#E9EEF5', fg: '#0E1A2B', muted: '#5B6676', line: 'rgba(14,26,43,0.12)', accent: '#2F5BEA', card: '#FFFFFF' },
-    tagline: 'Toute l’équipe, au même endroit.',
-    summary: 'Pour YesWeCange : pointage, présences, congés et suivi RH réunis dans une seule application.',
-    // Pas encore de captures : les écrans sont dessinés en code (components/TeamHubScreens.jsx).
-    // TODO : remplacer par de vraies captures quand l'interface sera conçue.
-    images: ['teamhub-pointage', 'teamhub-equipe', 'teamhub-conge'],
-    caseStudy: {
-      problem: 'Présences, congés et absences suivis à la main, à plusieurs endroits : peu de visibilité et beaucoup de vérifications.',
-      solution: 'Une app où chacun pointe en un clic et demande ses congés, et où le manager valide et suit son équipe en temps réel.',
-      facts: ['Pointage ordinateur & mobile', 'Congés validés en quelques clics', 'Exports Excel, CSV, PDF'],
-    },
-  },
-  {
     id: 'vous',
     name: 'Votre projet',
     kind: '—',
