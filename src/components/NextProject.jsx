@@ -1,7 +1,8 @@
 import { Dot } from './Logo.jsx'
-import { whatsappLink } from '../data/site.js'
+import { useWhatsapp } from '../content/ContentContext.jsx'
 
 export default function NextProject() {
+  const whatsappLink = useWhatsapp()
   return (
     <section className="mx-auto max-w-[1440px] px-5 pb-20 md:px-[72px] md:pb-32">
       <div className="border-t border-encre pt-12 md:pt-20">

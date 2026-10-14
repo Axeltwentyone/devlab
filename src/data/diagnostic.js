@@ -64,10 +64,3 @@ export const RECOMMENDATIONS = {
     price: 'Sur devis',
   },
 }
-
-export function buildMessage(answers) {
-  const [profil, besoin, quand] = QUESTIONS.map((q) => q.options.find((o) => o.id === answers[q.id]))
-  return `Bonjour DevLab ! ${capitalize(profil.phrase)}, ${besoin.phrase}, ${quand.phrase}. On peut en parler ?`
-}
-
-const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1)

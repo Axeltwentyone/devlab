@@ -10,7 +10,7 @@ const START_DELAY = 250
 const HOLD = 500 // pause une fois le texte complet
 const EXIT = 800 // durée de la levée du rideau
 const TOTAL = START_DELAY + TEXT_LENGTH * TYPE_DELAY + HOLD
-const SEEN_KEY = 'devlab-intro-vue'
+const SEEN_KEY = 'thelab-intro-vue'
 
 // Une seule fois par visite : inutile de rejouer l'intro à chaque rechargement
 export function introSeen() {

@@ -1,5 +1,5 @@
 import { Dot } from './Logo.jsx'
-import { PLANS, whatsappLink } from '../data/site.js'
+import { useContent, useWhatsapp } from '../content/ContentContext.jsx'
 
 const MAX_WEEKS = 12
 
@@ -85,10 +85,11 @@ function Weeks({ weeks: [min, max], delay }) {
 }
 
 function PlanCard({ plan, i }) {
+  const whatsappLink = useWhatsapp()
   const Art = ART[plan.id]
   const quote = !plan.unit
   return (
-    <li className="group flex w-[84vw] max-w-[420px] shrink-0 snap-center flex-col rounded-3xl border border-pierre bg-white p-3 transition-[border-color,box-shadow,translate] duration-500 hover:-translate-y-1 hover:border-encre hover:shadow-[0_30px_60px_-30px_rgba(17,17,17,0.35)] sm:w-[60vw] lg:w-auto lg:max-w-none">
+    <li id={`formule-${plan.id}`} className="group flex w-[84vw] max-w-[420px] shrink-0 snap-center flex-col rounded-3xl border border-pierre bg-white p-3 transition-[border-color,box-shadow,translate] duration-500 hover:-translate-y-1 hover:border-encre hover:shadow-[0_30px_60px_-30px_rgba(17,17,17,0.35)] sm:w-[60vw] lg:w-auto lg:max-w-none">
       <div className="relative flex h-44 items-center justify-center overflow-hidden rounded-2xl bg-fond">
         <span className="absolute left-4 top-3 text-xs text-gris">{String(i + 1).padStart(2, '0')}</span>
         {Art && <Art />}
@@ -106,7 +107,11 @@ function PlanCard({ plan, i }) {
         </p>
 
         <div className="mt-5">
-          <Weeks weeks={plan.weeks} delay={plan.delay} />
+          {plan.weeks?.length === 2 ? (
+            <Weeks weeks={plan.weeks} delay={plan.delay} />
+          ) : (
+            <p className="text-xs text-gris">Délai <span className="font-medium text-encre">{plan.delay}</span></p>
+          )}
         </div>
 
         <ul className="mt-6 flex flex-col gap-2.5 border-t border-fond pt-5 text-[15px] leading-relaxed">
@@ -132,7 +137,7 @@ function PlanCard({ plan, i }) {
             </p>
           )}
           <a
-            href={whatsappLink(`Bonjour DevLab ! La formule « ${plan.name} » m’intéresse. On peut en parler ?`)}
+            href={whatsappLink(`Bonjour theLab ! La formule « ${plan.name} » m’intéresse. On peut en parler ?`)}
             target="_blank"
             rel="noreferrer"
             data-cursor="voir"
@@ -149,18 +154,21 @@ function PlanCard({ plan, i }) {
 }
 
 export default function Plans() {
+  const { plans: PLANS } = useContent()
   return (
     <section id="formules" className="mx-auto max-w-[1440px] pb-20 md:pb-32">
       <div className="flex flex-col gap-5 px-5 md:flex-row md:items-end md:justify-between md:px-[72px]">
         <div>
-          <p className="text-sm font-medium text-gris">Formules</p>
-          <h2 className="mt-4 text-[clamp(2.1rem,5.3vw,4.75rem)] font-extrabold leading-none tracking-[-0.045em]">
+          <p className="label text-gris">Formules</p>
+          <h1 className="mt-4 text-[clamp(2.1rem,5.3vw,4.75rem)] font-extrabold leading-none tracking-[-0.045em]">
             Trois façons<br /><span className="text-gris">de démarrer</span><Dot className="bg-bronze" />
-          </h2>
+          </h1>
         </div>
-        <p className="max-w-xs font-light leading-relaxed text-gris md:text-right md:text-lg">
+        <div className="flex flex-col gap-4 md:items-end">
+          <p className="max-w-xs font-light leading-relaxed text-gris md:text-right md:text-lg">
           Prix et délai fixés ensemble avant de commencer. Rien ne change sans votre accord.
-        </p>
+          </p>
+        </div>
       </div>
 
       {/* Carrousel au doigt sur mobile, trois colonnes sur grand écran */}
@@ -173,7 +181,7 @@ export default function Plans() {
 
       {/* Pas sûr : renvoi vers le diagnostic */}
       <a
-        href="#diagnostic"
+        href="/diagnostic"
         className="group mx-5 mt-8 flex items-center justify-between gap-4 rounded-3xl bg-fond px-6 py-6 transition-colors hover:bg-pierre/60 md:mx-[72px] md:mt-10 md:px-10"
       >
         <span>

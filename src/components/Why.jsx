@@ -1,5 +1,5 @@
 import { Dot } from './Logo.jsx'
-import { REASONS } from '../data/site.js'
+import { useContent } from '../content/ContentContext.jsx'
 import useInView from '../hooks/useInView.js'
 
 // Visuels : chacun illustre l'engagement de sa carte, et s'anime quand la carte arrive à l'écran.
@@ -119,16 +119,17 @@ const CARDS = {
 
 function Card({ r, i }) {
   const [ref, on] = useInView({ threshold: 0.35 })
-  const { Art, dark, span } = CARDS[r.id]
+  const { Art, dark, span } = CARDS[r.id] || { Art: null, dark: i % 3 === 0, span: i % 4 === 0 || i % 4 === 3 ? 'md:col-span-7' : 'md:col-span-5' }
   return (
     <li
       ref={ref}
+      id={r.id ? `engagement-${r.id}` : undefined}
       className={`group flex min-h-[340px] flex-col justify-between gap-10 overflow-hidden rounded-3xl p-7 transition-transform duration-500 hover:-translate-y-1 md:min-h-[400px] md:p-9 ${span} ${
         dark ? 'bg-encre text-white' : 'bg-fond text-encre'
       }`}
     >
       <div className="flex min-h-36 items-center">
-        <Art on={on} />
+        {Art && <Art on={on} />}
       </div>
       <div>
         <span className={`text-sm ${dark ? 'text-doux' : 'text-gris'}`}>{String(i + 1).padStart(2, '0')}</span>
@@ -142,18 +143,21 @@ function Card({ r, i }) {
 }
 
 export default function Why() {
+  const { reasons: REASONS } = useContent()
   return (
     <section id="pourquoi" className="mx-auto max-w-[1440px] px-5 pb-20 md:px-[72px] md:pb-32">
       <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-medium text-gris">Pourquoi le lab ?</p>
+          <p className="label text-gris">Pourquoi le lab ?</p>
           <h2 className="mt-4 max-w-4xl text-[clamp(2.1rem,5.3vw,4.75rem)] font-extrabold leading-none tracking-[-0.045em]">
             Un partenaire,<br /><span className="text-gris">pas un prestataire</span><Dot className="bg-bronze" />
           </h2>
         </div>
-        <p className="max-w-xs font-light leading-relaxed text-gris md:text-right md:text-lg">
+        <div className="flex flex-col gap-4 md:items-end">
+          <p className="max-w-xs font-light leading-relaxed text-gris md:text-right md:text-lg">
           Quatre engagements, sur chaque projet.
-        </p>
+          </p>
+        </div>
       </div>
 
       <ul className="mt-12 grid gap-4 md:mt-16 md:grid-cols-12 md:gap-5">

@@ -1,24 +1,27 @@
 import { Dot } from './Logo.jsx'
 import { useEffect, useState } from 'react'
-import { AVAILABILITY, HOURS, NOW, whatsappLink } from '../data/site.js'
+import { useContent, useWhatsapp } from '../content/ContentContext.jsx'
 import useAbidjanClock from '../hooks/useAbidjanClock.js'
 
 const pad = (n) => String(n).padStart(2, '0')
 
 // Bande « en direct » : ce qu'on fait maintenant, l'heure au studio, les places restantes.
 function LiveStatus() {
-  const { h, m, s, open } = useAbidjanClock()
+  const { status } = useContent()
+  const { availability: AVAILABILITY, now: NOW, hours: HOURS } = status
+  const whatsappLink = useWhatsapp()
+  const { h, m, s, open } = useAbidjanClock(HOURS)
   const [i, setI] = useState(0)
   useEffect(() => {
     if (NOW.length < 2) return
     const id = setInterval(() => setI((x) => (x + 1) % NOW.length), 3800)
     return () => clearInterval(id)
-  }, [])
+  }, [NOW.length])
 
   return (
     <div className="mt-12 grid gap-6 border-t border-encre pt-5 sm:grid-cols-[minmax(0,1.6fr)_1fr_1fr] sm:gap-10 md:mt-24 md:max-w-5xl">
       <div className="min-w-0">
-        <p className="flex items-center gap-2 text-xs font-medium text-gris">
+        <p className="flex items-center gap-2 label text-gris">
           <span aria-hidden="true" className="relative flex size-2">
             <span className="absolute inset-0 animate-ping rounded-full bg-bronze opacity-60" />
             <span className="relative size-2 rounded-full bg-bronze" />
@@ -40,7 +43,7 @@ function LiveStatus() {
       </div>
 
       <div>
-        <p className="text-xs font-medium text-gris">Abidjan</p>
+        <p className="label text-gris">Abidjan</p>
         <p className="mt-1 text-[15px] tabular-nums">
           {pad(h)}:{pad(m)}<span className="text-doux">:{pad(s)}</span>
           <span className="ml-2 text-gris">· {open ? 'Studio ouvert' : `Fermé, réouverture ${HOURS.open} h`}</span>
@@ -48,10 +51,10 @@ function LiveStatus() {
       </div>
 
       <div>
-        <p className="text-xs font-medium text-gris">Disponibilité</p>
+        <p className="label text-gris">Disponibilité</p>
         <p className="mt-1 flex flex-wrap items-baseline gap-x-3 text-[15px]">
           {AVAILABILITY}
-          <a href={whatsappLink('Bonjour DevLab ! J’aimerais réserver une place pour mon projet.')} target="_blank" rel="noreferrer" className="border-b border-encre text-sm font-medium transition-colors hover:border-bronze hover:text-bronze">
+          <a href={whatsappLink('Bonjour theLab ! J’aimerais réserver une place pour mon projet.')} target="_blank" rel="noreferrer" className="border-b border-encre text-sm font-medium transition-colors hover:border-bronze hover:text-bronze">
             Réserver ↗
           </a>
         </p>
@@ -69,8 +72,12 @@ export default function Hero() {
         {LINES.map((line, i) => (
           <span key={line} className="block overflow-hidden pb-[0.06em]">
             <span className="hero-line block" style={{ animationDelay: `${120 + i * 110}ms` }}>
-              {line}
-              {i === LINES.length - 1 && <Dot className="bg-bronze" />}
+              {i === LINES.length - 1 ? (
+                <>
+                  {line.split(' ').slice(0, -1).join(' ')} <span className="accent">{line.split(' ').at(-1)}</span>
+                  <Dot className="bg-bronze" />
+                </>
+              ) : line}
             </span>
           </span>
         ))}

@@ -1,18 +1,19 @@
 import { Dot } from './Logo.jsx'
-import { EXPERTISE } from '../data/site.js'
+import { useContent } from '../content/ContentContext.jsx'
 
 export default function Expertise() {
+  const { expertise: EXPERTISE } = useContent()
   return (
-    <section className="py-20 md:py-32">
+    <section id="savoir-faire" className="py-20 md:py-32">
       <div className="mx-auto max-w-[1440px] px-5 md:px-[72px]">
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm font-medium text-gris">Savoir-faire</p>
+            <p className="label text-gris">Savoir-faire</p>
             <h2 className="mt-4 text-[clamp(2.1rem,5.3vw,4.75rem)] font-extrabold leading-none tracking-[-0.045em]">
               Ce qu’on sait<br /><span className="text-gris">faire, et bien</span><Dot className="bg-bronze" />
             </h2>
           </div>
-          <a href="#formules" className="self-start border-b border-encre pb-0.5 text-[15px] font-medium md:self-auto">
+          <a href="/formules" className="self-start border-b border-encre pb-0.5 text-[15px] font-medium md:self-auto">
             Voir les formules →
           </a>
         </div>
@@ -37,7 +38,7 @@ export default function Expertise() {
                 </p>
                 <ul className="mt-4 flex flex-wrap gap-2">
                   {e.tags.map((t) => (
-                    <li key={t} className="rounded-full border border-pierre px-3 py-1 text-xs transition-colors group-hover:border-trait group-hover:text-pierre">
+                    <li key={t} className="rounded-full border border-pierre px-3 py-1 font-mono text-[11px] transition-colors group-hover:border-trait group-hover:text-pierre">
                       {t}
                     </li>
                   ))}

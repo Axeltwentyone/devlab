@@ -2,14 +2,35 @@
 
 @theme {
   --color-encre: #111111;
-  --color-pierre: #D9D4CC;
-  --color-bronze: #9C7A4E;
-  --color-fond: #F4F2EE;
-  --color-gris: #77726B;
+  /* Charte theLab v1 : papier, encre, pierre, cendre, bronze (rouge en variante occasionnelle) */
+  --color-pierre: #D9D5CC;
+  --color-bronze: #A9774A;
+  --color-fond: #F3F2EE;
+  --color-gris: #6E6B64;
+  --color-rouge: #C8202B;
   --color-doux: #A8A29A;
   --color-trait: #2A2A2A;
   --font-sans: "Inter Tight", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-sign: "Allura", "Brush Script MT", cursive;
+  --font-lab: "Instrument Serif", "Times New Roman", serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+/* Mot d'accent : un seul mot en Instrument Serif dans un titre */
+@utility accent {
+  font-family: var(--font-lab);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  font-size: 1.08em;
+}
+
+/* Détails et étiquettes : DM Mono en capitales espacées */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
 }
 
 @layer base {
@@ -29,7 +50,3 @@
   .has-dot-cursor, .has-dot-cursor * { cursor: none; }
 }
 
-@keyframes sheet-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}

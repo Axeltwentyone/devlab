@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Dot } from './Logo.jsx'
-import { QUESTIONS, RECOMMENDATIONS, buildMessage } from '../data/diagnostic.js'
-import { whatsappLink } from '../data/site.js'
+import { buildMessage, useContent, useWhatsapp } from '../content/ContentContext.jsx'
 
 const TYPING_MS = 750
 
@@ -9,7 +8,7 @@ function BotBubble({ children, className = '' }) {
   return (
     <div className="chat-in flex max-w-[85%] items-end gap-2">
       <span aria-hidden="true" className="mb-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-encre text-[11px] font-extrabold text-white">
-        d<span className="text-bronze">.</span>
+        t<span className="text-bronze">.</span>
       </span>
       <div className={`rounded-2xl rounded-bl-md bg-white px-4 py-2.5 text-[15px] leading-snug text-encre shadow-[0_1px_0_rgba(17,17,17,0.06)] ${className}`}>
         {children}
@@ -36,9 +35,9 @@ function UserBubble({ children, onEdit }) {
 
 function Typing() {
   return (
-    <div className="chat-in flex items-end gap-2" aria-label="devlab écrit…">
+    <div className="chat-in flex items-end gap-2" aria-label="theLab écrit…">
       <span aria-hidden="true" className="flex size-7 items-center justify-center rounded-full bg-encre text-[11px] font-extrabold text-white">
-        d<span className="text-bronze">.</span>
+        t<span className="text-bronze">.</span>
       </span>
       <span className="flex gap-1 rounded-2xl rounded-bl-md bg-white px-4 py-3.5">
         {[0, 1, 2].map((k) => (
@@ -49,8 +48,8 @@ function Typing() {
   )
 }
 
-function Recommendation({ answers }) {
-  const reco = RECOMMENDATIONS[answers.besoin]
+function Recommendation({ reco }) {
+  if (!reco) return null
   return (
     <div className="chat-in ml-9 max-w-[88%] rounded-2xl rounded-tl-md bg-encre p-5 text-white">
       <p className="text-xs font-medium text-doux">Notre recommandation</p>
@@ -76,8 +75,21 @@ function Recommendation({ answers }) {
   )
 }
 
-export default function Diagnostic() {
-  const [answers, setAnswers] = useState({})
+export default function Diagnostic({ page = false, onResult }) {
+  const { diagnostic } = useContent()
+  const { questions: QUESTIONS, recommendations: RECOMMENDATIONS } = diagnostic
+  const whatsappLink = useWhatsapp()
+  // Une réponse peut arriver par l'adresse (/diagnostic?profil=commerce), depuis l'aperçu de l'accueil
+  const [answers, setAnswers] = useState(() => {
+    const params = new URLSearchParams(window.location.search)
+    const start = {}
+    for (const q of QUESTIONS) {
+      const v = params.get(q.id)
+      if (!v || !q.options.some((o) => o.id === v)) break
+      start[q.id] = v
+    }
+    return start
+  })
   const [typing, setTyping] = useState(false)
   const scrollRef = useRef(null)
   const timer = useRef(0)
@@ -108,17 +120,38 @@ export default function Diagnostic() {
   }
   const reset = () => editFrom(0)
 
-  const message = done ? buildMessage(answers) : ''
+  const message = done ? buildMessage(QUESTIONS, answers) : ''
+
+  // Garde une trace de la demande dans le back-office (sans bloquer l'ouverture de WhatsApp)
+  const recordLead = () => {
+    const label = (q) => q.options.find((o) => o.id === answers[q.id])?.label || ''
+    const byId = Object.fromEntries(QUESTIONS.map((q) => [q.id, label(q)]))
+    const body = JSON.stringify({
+      source: 'diagnostic',
+      answers: { profil: byId.profil, besoin: byId.besoin, quand: byId.quand },
+      plan: RECOMMENDATIONS[answers.besoin]?.plan || '',
+      message,
+    })
+    try {
+      fetch('/api/leads', { method: 'POST', body, keepalive: true, headers: { 'content-type': 'application/json' } }).catch(() => {})
+    } catch {}
+  }
   const justLooking = answers.quand === 'info'
+
+  // La page Diagnostic met en avant la recommandation obtenue
+  useEffect(() => {
+    onResult?.(done && !typing ? answers.besoin : null)
+  }, [done, typing, answers.besoin, onResult])
+  const Heading = page ? 'h1' : 'h2'
 
   return (
     <section id="diagnostic" className="bg-fond">
-      <div className="mx-auto grid max-w-[1440px] gap-10 px-5 py-16 md:px-[72px] md:py-32 lg:grid-cols-[1fr_minmax(0,520px)] lg:items-center lg:gap-20">
+      <div className="mx-auto grid max-w-[1440px] gap-10 px-5 py-16 md:px-[72px] md:py-28 lg:grid-cols-[1fr_minmax(0,520px)] lg:items-center lg:gap-20">
         <div>
-          <p className="text-sm font-medium text-gris">Diagnostic express</p>
-          <h2 className="mt-4 text-[clamp(2.1rem,5.3vw,4.75rem)] font-extrabold leading-none tracking-[-0.045em]">
+          <p className="label text-gris">Diagnostic express</p>
+          <Heading className="mt-4 text-[clamp(2.4rem,6vw,5.5rem)] font-extrabold leading-[0.95] tracking-[-0.05em]">
             Trois questions.<br /><span className="text-gris">Une recommandation</span><Dot className="bg-bronze" />
-          </h2>
+          </Heading>
           <p className="mt-6 max-w-md text-[17px] font-light leading-relaxed text-gris">
             30 secondes, sans inscription. Répondez comme sur WhatsApp, on vous dit ce dont vous avez vraiment besoin.
           </p>
@@ -149,13 +182,13 @@ export default function Diagnostic() {
         <div className="flex h-[min(640px,78svh)] flex-col overflow-hidden rounded-[28px] bg-[#EFEAE2] shadow-[0_40px_80px_-40px_rgba(17,17,17,0.4)] ring-1 ring-pierre">
           <div className="flex items-center gap-3 bg-encre px-5 py-3.5 text-white">
             <span className="flex size-9 items-center justify-center rounded-full bg-white text-sm font-extrabold text-encre">
-              d<span className="text-bronze">.</span>
+              t<span className="text-bronze">.</span>
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-[15px] font-medium leading-tight">devlab.</p>
+              <p className="text-[15px] font-medium leading-tight">theLab.</p>
               <p className="text-xs text-doux">{typing ? 'écrit…' : 'Diagnostic express · 30 s'}</p>
             </div>
-            <span className="text-xs text-doux">{done ? 3 : step} / {QUESTIONS.length}</span>
+            <span className="text-xs text-doux">{done ? QUESTIONS.length : step} / {QUESTIONS.length}</span>
           </div>
 
           <div ref={scrollRef} className="flex flex-1 flex-col gap-3 overflow-y-auto px-4 py-5" aria-live="polite">
@@ -176,7 +209,7 @@ export default function Diagnostic() {
             {done && !typing && (
               <>
                 <BotBubble>Merci ! Voici ce qu’on vous recommande :</BotBubble>
-                <Recommendation answers={answers} />
+                <Recommendation reco={RECOMMENDATIONS[answers.besoin]} />
               </>
             )}
           </div>
@@ -204,6 +237,7 @@ export default function Diagnostic() {
               <div className="flex flex-col gap-2">
                 <a
                   href={whatsappLink(message)}
+                  onClick={recordLead}
                   target="_blank"
                   rel="noreferrer"
                   className="chat-in flex items-center justify-center gap-2 rounded-full bg-[#25D366] py-3.5 text-[15px] font-medium text-encre transition-opacity hover:opacity-90"

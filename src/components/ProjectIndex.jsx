@@ -1,43 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Dot } from './Logo.jsx'
 import Phone from './Phone.jsx'
-import { PROJECTS } from '../data/site.js'
-import shoptongbaOnboarding from '../assets/shoptongba-onboarding.webp'
-import shoptongbaAccueil from '../assets/shoptongba-accueil.webp'
-import subciAccueil from '../assets/subci-accueil.webp'
-import subciExplorer from '../assets/subci-explorer.webp'
-import subciAbonnements from '../assets/subci-abonnements.webp'
-import subciOffre from '../assets/subci-offre.webp'
-import tiakoliseProduit from '../assets/tiakolise-produit.webp'
-import tiakolisePassion from '../assets/tiakolise-passion.webp'
-import tiakoliseCollection from '../assets/tiakolise-collection.webp'
-
-const IMAGES = {
-  'shoptongba-onboarding': shoptongbaOnboarding,
-  'shoptongba-accueil': shoptongbaAccueil,
-  'subci-accueil': subciAccueil,
-  'subci-explorer': subciExplorer,
-  'subci-abonnements': subciAbonnements,
-  'subci-offre': subciOffre,
-  'tiakolise-produit': tiakoliseProduit,
-  'tiakolise-passion': tiakolisePassion,
-  'tiakolise-collection': tiakoliseCollection,
-}
-const ALT = {
-  'shoptongba-onboarding': 'ShopTongba : écran d’accueil « Une voiture. Maintenant. »',
-  'shoptongba-accueil': 'ShopTongba : recherche de véhicules autour de soi à Abidjan',
-  'subci-accueil': 'Subci : accueil avec l’abonnement en cours d’activation et les offres populaires',
-  'subci-explorer': 'Subci : explorer les abonnements partagés disponibles et leurs prix',
-  'subci-abonnements': 'Subci : mes abonnements actifs et les économies du mois',
-  'subci-offre': 'Subci : gérer une offre partagée, prix par place et nombre de places',
-  'tiakolise-produit': 'Tiakolisé : fiche du t-shirt Mélo Décalé, tailles et prix',
-  'tiakolise-passion': 'Tiakolisé : « Plus qu’une passion », la série limitée',
-  'tiakolise-collection': 'Tiakolisé : stocks restants et la collection complète',
-}
-
+import { useContent } from '../content/ContentContext.jsx'
+import { imageAlt, imageSrc } from '../content/images.js'
 // Un écran de projet : une capture dans un téléphone.
-function Shot({ id, alt = ALT[id], className = '' }) {
-  return <Phone src={IMAGES[id]} alt={alt} className={className} />
+export function Shot({ id, alt = imageAlt(id), className = '' }) {
+  return <Phone src={imageSrc(id)} alt={alt} className={className} />
 }
 
 const num = (i) => String(i + 1).padStart(2, '0')
@@ -92,7 +60,7 @@ function Thumb({ p, i, active, onSelect }) {
       </span>
       {cover ? (
         <img
-          src={IMAGES[cover]}
+          src={imageSrc(cover)}
           alt=""
           className={`absolute -bottom-10 right-4 w-24 rotate-[-6deg] rounded-xl object-cover object-top shadow-xl transition-transform duration-700 ${
             active ? 'translate-y-0' : 'translate-y-10'
@@ -103,30 +71,6 @@ function Thumb({ p, i, active, onSelect }) {
         <span className="absolute right-5 top-1/2 -translate-y-1/2 text-5xl font-extrabold" style={{ color: t.accent }}>?</span>
       )}
     </button>
-  )
-}
-
-function Facts({ p }) {
-  const t = p.theme
-  if (!p.caseStudy) return null
-  return (
-    <>
-      <dl className="mt-8 grid max-w-xl gap-5 border-t pt-6 xl:grid-cols-2 xl:gap-8" style={{ borderColor: t.line }}>
-        <div>
-          <dt className="text-xs font-medium" style={{ color: t.muted }}>Le problème</dt>
-          <dd className="mt-1.5 text-[15px] leading-relaxed">{p.caseStudy.problem}</dd>
-        </div>
-        <div>
-          <dt className="text-xs font-medium" style={{ color: t.muted }}>Ce qu’on a construit</dt>
-          <dd className="mt-1.5 text-[15px] leading-relaxed">{p.caseStudy.solution}</dd>
-        </div>
-      </dl>
-      <ul className="mt-6 flex flex-wrap gap-2">
-        {p.caseStudy.facts.map((f) => (
-          <li key={f} className="rounded-full px-3 py-1 text-xs" style={{ boxShadow: `inset 0 0 0 1px ${t.line}` }}>{f}</li>
-        ))}
-      </ul>
-    </>
   )
 }
 
@@ -167,7 +111,7 @@ function Phones({ p, active, className = '' }) {
   )
 }
 
-function SiteLink({ url, className = '' }) {
+export function SiteLink({ url, className = '' }) {
   return (
     <a href={url} target="_blank" rel="noreferrer" data-cursor="voir" className={`border-b border-current pb-0.5 text-sm font-medium transition-opacity hover:opacity-70 ${className}`}>
       Voir le site <span aria-hidden="true">↗</span>
@@ -176,7 +120,7 @@ function SiteLink({ url, className = '' }) {
 }
 
 // Le point reste collé au dernier mot, même si le titre passe sur deux lignes.
-function TitleWithDot({ name, color }) {
+export function TitleWithDot({ name, color }) {
   const words = name.split(' ')
   const last = words.pop()
   return (
@@ -211,7 +155,6 @@ function Panel({ p, i, active }) {
         </h3>
         <p className="mt-5 text-[clamp(1.25rem,1.8vw,1.6rem)] font-light" style={{ color: t.muted }}>{p.tagline}</p>
         <p className="mt-6 max-w-lg text-[17px] font-light leading-relaxed">{p.summary}</p>
-        <Facts p={p} />
         {p.href && (
           <a
             href={p.href}
@@ -223,7 +166,15 @@ function Panel({ p, i, active }) {
           </a>
         )}
         {!p.href && (
-          <div className="mt-6 flex items-center gap-5">
+          <div className="mt-10 flex flex-wrap items-center gap-5">
+            <a
+              href={`/projets/${p.id.toLowerCase()}`}
+              data-cursor="voir"
+              className="inline-flex items-center gap-3 rounded-full px-6 py-3.5 text-sm font-medium transition-transform hover:-translate-y-0.5"
+              style={{ background: t.fg, color: t.bg }}
+            >
+              Voir l’étude de cas <span aria-hidden="true">→</span>
+            </a>
             <span className="inline-flex rounded-full px-3 py-1 text-xs font-medium" style={{ background: t.accent, color: '#fff' }}>
               {p.status}
             </span>
@@ -237,24 +188,13 @@ function Panel({ p, i, active }) {
 }
 
 // Mobile et tablette : même principe épinglé, pensé pour le pouce.
-// En haut des segments façon stories, au centre les écrans, en bas le projet ; l'étude de cas s'ouvre en panneau.
+// En haut des segments façon stories, au centre les écrans, en bas le projet et le lien vers son étude de cas.
 function MobileStage() {
+  const { projects: PROJECTS } = useContent()
   const ref = useRef(null)
   const { index, progress } = useActiveIndex(ref, PROJECTS.length)
-  const [sheet, setSheet] = useState(null)
   const p = PROJECTS[index]
   const t = p.theme
-
-  useEffect(() => {
-    if (!sheet) return
-    const onKey = (e) => e.key === 'Escape' && setSheet(null)
-    document.body.style.overflow = 'hidden'
-    window.addEventListener('keydown', onKey)
-    return () => {
-      document.body.style.overflow = ''
-      window.removeEventListener('keydown', onKey)
-    }
-  }, [sheet])
 
   const goTo = (i) => {
     const el = ref.current
@@ -262,8 +202,6 @@ function MobileStage() {
     const top = el.getBoundingClientRect().top + window.scrollY
     window.scrollTo({ top: top + (scrollable * (i + 0.5)) / PROJECTS.length, behavior: 'smooth' })
   }
-
-  const open = sheet && PROJECTS.find((x) => x.id === sheet)
 
   // Glisser à gauche / à droite sur les écrans : projet suivant / précédent
   const touch = useRef(null)
@@ -287,7 +225,9 @@ function MobileStage() {
         {/* Segments : un par projet, celui en cours se remplit avec le scroll */}
         <div className="px-5 pt-5 md:px-[72px]">
           <div className="flex items-center justify-between text-xs" style={{ color: t.muted }}>
-            <h2 className="font-medium">Projets</h2>
+            <h2 className="font-medium">
+              Projets · <a href="/projets" className="underline underline-offset-4" style={{ color: t.fg }}>Tout voir</a>
+            </h2>
             <span>{num(index)} / {num(PROJECTS.length - 1)}</span>
           </div>
           <div className="mt-3 flex gap-1.5">
@@ -356,7 +296,7 @@ function MobileStage() {
                           transform: `translate(-50%, -50%) translate(${tx}vw, ${l.y}%) rotate(${side ? side * 12 : l.r}deg) scale(${l.s})`,
                         }}
                       >
-                        <Shot id={img} alt={active ? ALT[img] : ''} className="w-[min(46vw,calc(44svh*0.4615),15rem)]" />
+                        <Shot id={img} alt={active ? imageAlt(img, x.name) : ''} className="w-[min(46vw,calc(44svh*0.4615),15rem)]" />
                       </div>
                     )
                   })
@@ -416,15 +356,14 @@ function MobileStage() {
                     </a>
                   ) : (
                     <>
-                      <button
-                        type="button"
+                      <a
+                        href={`/projets/${x.id.toLowerCase()}`}
                         tabIndex={active ? 0 : -1}
-                        onClick={() => setSheet(x.id)}
                         className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium"
                         style={{ background: x.theme.fg, color: x.theme.bg }}
                       >
-                        L’étude de cas <span aria-hidden="true">↑</span>
-                      </button>
+                        L’étude de cas <span aria-hidden="true">→</span>
+                      </a>
                       <span className="rounded-full px-3 py-1 text-xs font-medium" style={{ background: x.theme.accent, color: '#fff' }}>{x.status}</span>
                       {x.url && <SiteLink url={x.url} className="ml-auto" />}
                     </>
@@ -436,42 +375,12 @@ function MobileStage() {
         </div>
       </div>
 
-      {/* Étude de cas en panneau qui remonte du bas */}
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-end" role="dialog" aria-modal="true" aria-label={`Étude de cas : ${open.name}`}>
-          <button type="button" aria-label="Fermer" className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setSheet(null)} />
-          <div
-            className="relative max-h-[82svh] w-full overflow-y-auto rounded-t-3xl px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-3 md:px-[72px]"
-            style={{ background: open.theme.bg, color: open.theme.fg, animation: 'sheet-up .45s cubic-bezier(.2,.7,.2,1)' }}
-          >
-            <span className="mx-auto block h-1 w-10 rounded-full" style={{ background: open.theme.line }} />
-            <div className="mt-5 flex items-start justify-between gap-4">
-              <div>
-                <p className="text-xs" style={{ color: open.theme.muted }}>{open.kind} · {open.year}</p>
-                <h3 className="mt-1 text-4xl font-extrabold tracking-[-0.05em]">
-                  <TitleWithDot name={open.name} color={open.theme.accent} />
-                </h3>
-              </div>
-              <button type="button" onClick={() => setSheet(null)} className="rounded-full px-3 py-1.5 text-sm" style={{ boxShadow: `inset 0 0 0 1px ${open.theme.line}` }}>
-                Fermer
-              </button>
-            </div>
-            <p className="mt-5 text-[17px] font-light leading-relaxed">{open.summary}</p>
-            <Facts p={open} />
-            <div className="-mx-5 mt-8 flex gap-3 overflow-x-auto px-5 pb-2">
-              {open.images.map((img) => (
-                <Shot key={img} id={img} className="w-36 shrink-0" />
-              ))}
-            </div>
-            {open.url && <SiteLink url={open.url} className="mt-8 inline-block" />}
-          </div>
-        </div>
-      )}
     </div>
   )
 }
 
 export default function ProjectIndex() {
+  const { projects: PROJECTS } = useContent()
   const ref = useRef(null)
   const { index, progress } = useActiveIndex(ref, PROJECTS.length)
   const t = PROJECTS[index].theme
@@ -497,9 +406,12 @@ export default function ProjectIndex() {
         >
           <div className="mx-auto grid h-full max-w-[1440px] grid-cols-[280px_minmax(0,1fr)] gap-16 px-[72px] py-12 xl:grid-cols-[320px_minmax(0,1fr)]">
             <div className="flex flex-col">
-              <h2 className="text-sm font-medium transition-colors duration-700" style={{ color: t.muted }}>
-                Projets<Dot className="bg-current" />
-              </h2>
+              <div className="flex items-baseline justify-between gap-4">
+                <h2 className="text-sm font-medium transition-colors duration-700" style={{ color: t.muted }}>
+                  Projets<Dot className="bg-current" />
+                </h2>
+                <a href="/projets" className="border-b border-current pb-0.5 text-sm font-medium transition-opacity hover:opacity-70">Tout voir →</a>
+              </div>
               <div className="mt-8 flex flex-1 flex-col justify-center gap-4">
                 {PROJECTS.map((p, i) => (
                   <Thumb key={p.id} p={p} i={i} active={i === index} onSelect={() => goTo(i)} />

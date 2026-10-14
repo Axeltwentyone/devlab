@@ -1,3 +1,6 @@
 node_modules
 dist
 dist-single
+.data
+.env.local
+.vercel

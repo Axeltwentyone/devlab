@@ -1,5 +1,5 @@
 {
-  "name": "devlab-site",
+  "name": "thelab-site",
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
@@ -8,6 +8,7 @@
     "build:single": "vite build --mode single"
   },
   "dependencies": {
+    "@vercel/blob": "^2.8.2",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Dot } from './Logo.jsx'
-import { STEPS } from '../data/site.js'
+import { useContent } from '../content/ContentContext.jsx'
 
 // Progression de la frise : la ligne de lecture est aux deux tiers de l'écran.
 // Renvoie la part du fil remplie et les étapes déjà atteintes.
@@ -42,7 +42,7 @@ function Chat({ on }) {
   return (
     <div className="flex flex-col gap-2 text-[13px]">
       <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-[#D9FDD3] px-3 py-2 text-encre transition-all duration-500" style={{ opacity: on ? 1 : 0, translate: on ? '0 0' : '0 8px' }}>
-        Bonjour DevLab ! J’aimerais parler d’un projet.
+        Bonjour theLab ! J’aimerais parler d’un projet.
         <span className="ml-2 text-[10px] text-[#53BDEB]">✓✓</span>
       </p>
       <p className="max-w-[85%] rounded-2xl rounded-bl-md bg-white px-3 py-2 text-encre transition-all duration-500" style={{ opacity: on ? 1 : 0, translate: on ? '0 0' : '0 8px', transitionDelay: on ? '500ms' : '0ms' }}>
@@ -119,6 +119,7 @@ function Live({ on }) {
 const ARTIFACTS = [Chat, Quote, Build, Live]
 
 export default function Method() {
+  const { steps: STEPS } = useContent()
   const trackRef = useRef(null)
   const { p: progress, reached } = useTrackProgress(trackRef)
 
@@ -126,14 +127,16 @@ export default function Method() {
     <section id="methode" className="mx-auto max-w-[1440px] px-5 pb-20 md:px-[72px] md:pb-32">
       <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-medium text-gris">La méthode devlab</p>
+          <p className="label text-gris">La méthode theLab</p>
           <h2 className="mt-4 text-[clamp(2.1rem,5.3vw,4.75rem)] font-extrabold leading-none tracking-[-0.045em]">
             Du premier message<br /><span className="text-gris">à la mise en ligne</span><Dot className="bg-bronze" />
           </h2>
         </div>
-        <p className="max-w-xs font-light leading-relaxed text-gris md:text-right md:text-lg">
+        <div className="flex flex-col gap-4 md:items-end">
+          <p className="max-w-xs font-light leading-relaxed text-gris md:text-right md:text-lg">
           Quatre étapes, pas de surprise. Vous savez toujours où en est votre projet.
-        </p>
+          </p>
+        </div>
       </div>
 
       <ol ref={trackRef} className="relative mt-12 grid gap-10 pl-10 md:mt-20 lg:grid-cols-4 lg:gap-8 lg:pl-0 lg:pt-12">
@@ -157,9 +160,11 @@ export default function Method() {
                 <span className="text-sm text-gris">Étape {i + 1}</span>
                 <h3 className="mt-2 text-2xl font-extrabold tracking-[-0.035em] md:text-[28px]">{step.title}</h3>
                 <p className="mt-3 max-w-xs text-[15px] font-light leading-relaxed text-gris">{step.text}</p>
-                <div className="mt-6 max-w-sm rounded-2xl bg-fond p-4">
-                  <Artifact on={on} />
-                </div>
+                {Artifact && (
+                  <div className="mt-6 max-w-sm rounded-2xl bg-fond p-4">
+                    <Artifact on={on} />
+                  </div>
+                )}
               </div>
             </li>
           )
