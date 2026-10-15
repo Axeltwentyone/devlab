@@ -1,4 +1,4 @@
-import Logo, { Dot } from './Logo.jsx'
+import { Dot } from './Logo.jsx'
 import { useContent, useWhatsapp } from '../content/ContentContext.jsx'
 import useAbidjanClock from '../hooks/useAbidjanClock.js'
 
@@ -132,10 +132,7 @@ export default function Closing({ compact = false }) {
         </div>
       </div>
 
-      <div aria-hidden="true" className="mt-8 flex justify-center">
-        <Logo className="text-[29vw] md:text-[26vw] xl:text-[420px]" />
-      </div>
-      <p className="label pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-2 text-center text-doux">Studio web &amp; mobile — Abidjan</p>
+      <p className="label pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-12 text-center text-doux"></p>
     </footer>
   )
 }
