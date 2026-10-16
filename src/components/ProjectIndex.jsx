@@ -191,7 +191,7 @@ function Panel({ p, i, active }) {
 // Mobile et tablette : même principe épinglé, pensé pour le pouce.
 // En haut des segments façon stories, au centre les écrans, en bas le projet et le lien vers son étude de cas.
 // Sortir de la section épinglée sans faire défiler tous les projets : remonter avant, ou passer après
-function Skip({ sectionRef, theme, className = '' }) {
+function Skip({ sectionRef, theme, className = '', compact = false }) {
   const go = (where) => {
     const el = sectionRef.current
     if (!el) return
@@ -199,7 +199,7 @@ function Skip({ sectionRef, theme, className = '' }) {
     const target = where === 'up' ? Math.max(0, top - window.innerHeight * 0.75) : top + el.offsetHeight - 64
     scrollToY(target)
   }
-  const btn = 'flex h-9 items-center gap-1.5 rounded-full px-3.5 text-xs font-medium transition-[background-color,color] duration-300'
+  const btn = `flex h-9 items-center justify-center gap-1.5 rounded-full text-xs font-medium transition-[background-color,color] duration-300 ${compact ? 'w-9' : 'px-3.5'}`
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <button
@@ -209,7 +209,7 @@ function Skip({ sectionRef, theme, className = '' }) {
         className={btn}
         style={{ boxShadow: `inset 0 0 0 1px ${theme.line}`, color: theme.fg }}
       >
-        <span aria-hidden="true">↑</span> Remonter
+        <span aria-hidden="true">↑</span>{!compact && ' Remonter'}
       </button>
       <button
         type="button"
@@ -218,7 +218,7 @@ function Skip({ sectionRef, theme, className = '' }) {
         className={btn}
         style={{ background: theme.fg, color: theme.bg }}
       >
-        Passer <span aria-hidden="true">↓</span>
+        {!compact && 'Passer '}<span aria-hidden="true">↓</span>
       </button>
     </div>
   )
@@ -254,19 +254,21 @@ function MobileStage() {
   return (
     <div ref={ref} className="relative lg:hidden" style={{ height: `${PROJECTS.length * 100}svh` }}>
       <div
-        className="sticky top-0 flex h-svh flex-col overflow-hidden pt-16 transition-colors duration-700 md:pt-[84px]"
+        className="sticky top-0 flex h-dvh flex-col overflow-hidden pt-[84px] transition-colors duration-700 md:pt-[92px]"
         style={{ background: t.bg, color: t.fg }}
       >
         {/* Segments : un par projet, celui en cours se remplit avec le scroll */}
-        <div className="px-5 pt-5 md:px-[72px]">
-          <div className="flex items-center justify-between text-xs" style={{ color: t.muted }}>
+        <div className="px-5 pt-2 md:px-[72px]">
+          <div className="flex items-center justify-between gap-3 text-xs" style={{ color: t.muted }}>
             <h2 className="font-medium">
               Projets · <a href="/projets" className="underline underline-offset-4" style={{ color: t.fg }}>Tout voir</a>
             </h2>
-            <span>{num(index)} / {num(PROJECTS.length - 1)}</span>
+            <div className="flex items-center gap-3">
+              <span className="tabular-nums">{num(index)} / {num(PROJECTS.length - 1)}</span>
+              <Skip sectionRef={ref} theme={t} compact />
+            </div>
           </div>
-          <Skip sectionRef={ref} theme={t} className="mt-3 justify-end" />
-          <div className="mt-3 flex gap-1.5">
+          <div className="mt-2 flex gap-1.5">
             {PROJECTS.map((x, i) => {
               const fill = Math.min(1, Math.max(0, progress * PROJECTS.length - i))
               return (
@@ -287,12 +289,11 @@ function MobileStage() {
           </div>
         </div>
 
-        {/* Scène : l'univers du projet (halo + nom géant) et ses écrans, qui glissent d'un projet à l'autre */}
-        <div className="relative min-h-0 flex-1" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+        {/* Scène : l’univers du projet (halo) et ses écrans, qui glissent d'un projet à l'autre */}
+        <div className="relative min-h-0 flex-1 [container-type:size]" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
           {PROJECTS.map((x, i) => {
             const active = i === index
             const side = i < index ? -1 : i > index ? 1 : 0
-            const local = Math.min(1, Math.max(0, progress * PROJECTS.length - i))
             const shots = x.images.slice(0, 3)
             // Écran central en avant, les autres en retrait de chaque côté
             const layout = shots.length >= 3
@@ -309,13 +310,6 @@ function MobileStage() {
                   className="absolute inset-0 transition-opacity duration-700"
                   style={{ opacity: active ? 1 : 0, background: `radial-gradient(60% 45% at 50% 50%, ${x.theme.accent}55, transparent 70%)` }}
                 />
-                {/* Nom géant en filigrane, qui glisse avec le scroll */}
-                <div
-                  className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 whitespace-nowrap text-[34vw] font-extrabold leading-none tracking-[-0.06em] transition-opacity duration-700"
-                  style={{ opacity: active ? 0.07 : 0, transform: `translate(${10 - local * 45}%, -50%)` }}
-                >
-                  {x.name}
-                </div>
 
                 {order.length ? (
                   order.map((img, k) => {
@@ -332,7 +326,7 @@ function MobileStage() {
                           transform: `translate(-50%, -50%) translate(${tx}vw, ${l.y}%) rotate(${side ? side * 12 : l.r}deg) scale(${l.s})`,
                         }}
                       >
-                        <Shot id={img} alt={active ? imageAlt(img, x.name) : ''} className="w-[min(46vw,calc(44svh*0.4615),15rem)]" />
+                        <Shot id={img} alt={active ? imageAlt(img, x.name) : ''} className="w-[min(44vw,calc(78cqh*0.4615),15rem)]" />
                       </div>
                     )
                   })
@@ -343,7 +337,7 @@ function MobileStage() {
                     style={{ opacity: active ? 1 : 0, transform: `translate(-50%, -50%) translateX(${side * 110}vw)` }}
                   >
                     <div
-                      className="flex aspect-[9/19.5] w-[min(46vw,calc(44svh*0.4615),15rem)] flex-col items-center justify-center gap-3 rounded-[2.2rem] border-2 border-dashed text-center"
+                      className="flex aspect-[9/19.5] w-[min(44vw,calc(78cqh*0.4615),15rem)] flex-col items-center justify-center gap-3 rounded-[2.2rem] border-2 border-dashed text-center"
                       style={{ borderColor: x.theme.accent }}
                     >
                       <span className="flex size-14 items-center justify-center rounded-full text-3xl font-light text-white" style={{ background: x.theme.accent }}>+</span>
@@ -384,7 +378,7 @@ function MobileStage() {
                 <h3 className="mt-2 text-[clamp(2.6rem,13vw,4.5rem)] font-extrabold leading-[0.9] tracking-[-0.05em]">
                   <TitleWithDot name={x.name} color={x.theme.accent} />
                 </h3>
-                <p className="mt-3 line-clamp-3 text-[15px] font-light leading-relaxed" style={{ color: x.theme.muted }}>{x.summary}</p>
+                <p className="mt-3 line-clamp-2 text-[15px] font-light leading-relaxed" style={{ color: x.theme.muted }}>{x.summary}</p>
                 <div className="mt-5 flex flex-wrap items-center gap-3">
                   {x.href ? (
                     <a href={x.href} tabIndex={active ? 0 : -1} className="inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium text-white" style={{ background: x.theme.accent }}>
