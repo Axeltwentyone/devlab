@@ -10,7 +10,7 @@ export default function DiagnosticTeaser() {
   return (
     <section id="diagnostic" className="bg-fond">
       <div className="mx-auto grid max-w-[1440px] gap-10 px-5 py-20 md:px-[72px] md:py-28 lg:grid-cols-[1fr_minmax(0,520px)] lg:items-center lg:gap-20">
-        <div>
+        <div data-reveal>
           <p className="label text-gris">Diagnostic express</p>
           <h2 className="mt-4 text-[clamp(2.1rem,5.3vw,4.75rem)] font-extrabold leading-none tracking-[-0.045em]">
             Trois questions.<br /><span className="text-gris">Une recommandation</span><Dot className="bg-bronze" />
@@ -21,7 +21,7 @@ export default function DiagnosticTeaser() {
           <MoreLink href="/diagnostic" className="mt-8">Faire le diagnostic</MoreLink>
         </div>
 
-        <div className="rounded-[28px] bg-[#EFEAE2] p-5 shadow-[0_40px_80px_-40px_rgba(17,17,17,0.4)] ring-1 ring-pierre md:p-6">
+        <div data-reveal style={{ '--i': 2 }} className="rounded-[28px] bg-[#EFEAE2] p-5 shadow-[0_40px_80px_-40px_rgba(17,17,17,0.4)] ring-1 ring-pierre md:p-6">
           <div className="flex max-w-[85%] items-end gap-2">
             <span aria-hidden="true" className="mb-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-encre text-[11px] font-extrabold text-white">
               t<span className="text-bronze">.</span>

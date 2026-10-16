@@ -172,7 +172,7 @@ export default function Plans() {
       </div>
 
       {/* Carrousel au doigt sur mobile, trois colonnes sur grand écran */}
-      <ul className="mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-6 [scrollbar-width:none] md:mt-16 md:px-[72px] lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden">
+      <ul data-reveal-stagger className="mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-6 [scrollbar-width:none] md:mt-16 md:px-[72px] lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden">
         {PLANS.map((plan, i) => (
           <PlanCard key={plan.id} plan={plan} i={i} />
         ))}

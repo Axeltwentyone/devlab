@@ -10,7 +10,7 @@ export default function StudioTeaser() {
   return (
     <section id="studio" className="mx-auto max-w-[1440px] px-5 py-20 md:px-[72px] md:py-32">
       <p className="label text-gris">Le studio</p>
-      <a href="/studio" className="group mt-6 block">
+      <a href="/studio" data-reveal-stagger className="group mt-6 block">
         {lines.map((line, i) => (
           <p
             key={i}

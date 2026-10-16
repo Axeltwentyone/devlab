@@ -16,7 +16,7 @@ function Outcomes({ match }) {
       <h2 className="mt-4 max-w-3xl text-[clamp(2.1rem,4.5vw,4rem)] font-extrabold leading-none tracking-[-0.045em]">
         Ce qu’on peut<br /><span className="text-gris">vous conseiller</span><Dot className="bg-bronze" />
       </h2>
-      <ul className="mt-12 grid gap-4 md:mt-16 md:grid-cols-2">
+      <ul data-reveal-stagger className="mt-12 grid gap-4 md:mt-16 md:grid-cols-2">
         {entries.map(([key, r]) => {
           const answer = besoin?.options.find((o) => o.id === key)?.label
           const yours = match === key
@@ -64,7 +64,7 @@ function After() {
     <section className="bg-fond">
       <div className="mx-auto max-w-[1440px] px-5 py-20 md:px-[72px] md:py-28">
         <p className="label text-gris">Et ensuite ?</p>
-        <ol className="mt-10 grid gap-10 md:grid-cols-3 md:gap-8">
+        <ol data-reveal-stagger className="mt-10 grid gap-10 md:grid-cols-3 md:gap-8">
           {items.map((it, i) => (
             <li key={it.title} className="border-t border-encre pt-6">
               <span className="text-[clamp(3rem,5vw,4.5rem)] font-extrabold leading-none tracking-[-0.06em] text-pierre">{i + 1}</span>

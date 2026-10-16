@@ -1,6 +1,7 @@
 import { Dot } from './Logo.jsx'
 import { useContent, useWhatsapp } from '../content/ContentContext.jsx'
 import useAbidjanClock from '../hooks/useAbidjanClock.js'
+import { scrollToY } from '../motion/scroll.js'
 
 const pad = (n) => String(n).padStart(2, '0')
 // 2250797589617 → +225 07 97 58 96 17
@@ -70,7 +71,7 @@ export function ContactCards({ className = '' }) {
   const whatsappLink = useWhatsapp()
   const instagram = contact.socials.find((s) => s.label === 'Instagram' && s.href && s.href !== '#')
   return (
-    <div className={`grid gap-4 md:grid-cols-2 xl:grid-cols-[1.4fr_1fr_1fr_1fr] ${className}`}>
+    <div data-reveal-stagger className={`grid gap-4 md:grid-cols-2 xl:grid-cols-[1.4fr_1fr_1fr_1fr] ${className}`}>
       <Card
         href={whatsappLink()}
         external
@@ -125,7 +126,7 @@ export default function Closing({ compact = false }) {
             {contact.email && <a href={`mailto:${contact.email}`} className="transition-colors hover:text-white">{contact.email}</a>}
             <span>Abidjan, Côte d’Ivoire</span>
             <span>© {new Date().getFullYear()} theLab</span>
-            <a href="#contenu" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }} className="flex items-center gap-2 text-white transition-colors hover:text-bronze">
+            <a href="#contenu" onClick={(e) => { e.preventDefault(); scrollToY(0) }} className="flex items-center gap-2 text-white transition-colors hover:text-bronze">
               Haut de page <span aria-hidden="true">↑</span>
             </a>
           </div>

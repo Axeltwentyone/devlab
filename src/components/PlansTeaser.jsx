@@ -8,7 +8,7 @@ export default function PlansTeaser() {
   const { plans } = useContent()
   return (
     <section id="formules" className="mx-auto max-w-[1440px] mt-6 px-5 pb-20 md:px-[72px] md:pb-32">
-      <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+      <div data-reveal className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="label text-gris">Formules</p>
           <h2 className="mt-4 text-[clamp(2.1rem,5.3vw,4.75rem)] font-extrabold leading-none tracking-[-0.045em]">
@@ -18,7 +18,7 @@ export default function PlansTeaser() {
         <MoreLink href="/formules" className="self-start md:self-auto">Comparer les formules</MoreLink>
       </div>
 
-      <ul className="mt-12 border-b border-pierre md:mt-16">
+      <ul data-reveal-stagger className="mt-12 border-b border-pierre md:mt-16">
         {plans.map((p, i) => (
           <li key={p.id}>
             <a

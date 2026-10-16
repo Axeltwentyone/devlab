@@ -191,7 +191,7 @@ export default function Diagnostic({ page = false, onResult }) {
             <span className="text-xs text-doux">{done ? QUESTIONS.length : step} / {QUESTIONS.length}</span>
           </div>
 
-          <div ref={scrollRef} className="flex flex-1 flex-col gap-3 overflow-y-auto px-4 py-5" aria-live="polite">
+          <div ref={scrollRef} data-lenis-prevent className="flex flex-1 flex-col gap-3 overflow-y-auto px-4 py-5" aria-live="polite">
             <BotBubble>Bonjour 👋 Trois petites questions et on vous dit ce qu’il vous faut.</BotBubble>
             {QUESTIONS.map((q, i) => {
               const a = q.options.find((o) => o.id === answers[q.id])

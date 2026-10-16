@@ -6,7 +6,7 @@ export default function Expertise() {
   return (
     <section id="savoir-faire" className="py-20 md:py-32">
       <div className="mx-auto max-w-[1440px] px-5 md:px-[72px]">
-        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+        <div data-reveal className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="label text-gris">Savoir-faire</p>
             <h2 className="mt-4 text-[clamp(2.1rem,5.3vw,4.75rem)] font-extrabold leading-none tracking-[-0.045em]">
@@ -18,7 +18,7 @@ export default function Expertise() {
           </a>
         </div>
 
-        <ul className="mt-12 border-b border-pierre md:mt-16">
+        <ul data-reveal-stagger className="mt-12 border-b border-pierre md:mt-16">
           {EXPERTISE.map((e, i) => (
             <li
               key={e.name}

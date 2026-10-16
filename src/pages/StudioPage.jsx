@@ -41,9 +41,9 @@ function Intro() {
   const words = [['Ce', 'qui', 'nous'], ['fait', 'avancer']]
   let k = 0
   return (
-    <header className="mx-auto flex min-h-[calc(100svh-4rem)] max-w-[1440px] flex-col px-5 pb-10 pt-14 md:min-h-[calc(100svh-84px)] md:px-[72px] md:pt-24">
+    <header className="mx-auto flex min-h-[60svh] max-w-[1440px] flex-col px-5 pb-10 pt-14 md:px-[72px] md:pt-20">
       <p className="label text-gris">Le studio · Abidjan, Côte d’Ivoire</p>
-      <h1 className="my-auto py-12 text-[clamp(3.25rem,11vw,10.5rem)] font-extrabold leading-[0.88] tracking-[-0.055em]">
+      <h1 className="my-auto py-10 text-[clamp(3.25rem,10vw,9rem)] font-extrabold leading-[0.88] tracking-[-0.055em]">
         {words.map((line, i) => (
           <span key={i} className="block overflow-hidden pb-[0.06em]">
             {line.map((w) => {
@@ -69,7 +69,8 @@ function Intro() {
   )
 }
 
-// 2. Manifeste : la section reste à l'écran, une phrase à la fois, le fond change à chaque phrase
+// 2. Manifeste : la section reste à l'écran, une phrase à la fois, le fond change à chaque phrase.
+// Épinglage court (1 écran + 35 % par phrase suivante) : on le lit sans devoir faire défiler longtemps.
 const SCENES = [
   { bg: 'var(--color-fond)', fg: 'var(--color-encre)', muted: 'var(--color-gris)' },
   { bg: 'var(--color-encre)', fg: '#FFFFFF', muted: 'var(--color-doux)' },
@@ -83,7 +84,7 @@ function Manifesto({ lines }) {
   const index = Math.min(lines.length - 1, Math.floor(p * lines.length))
   const scene = SCENES[index % SCENES.length]
   return (
-    <section ref={ref} aria-label="Manifeste" className="relative" style={{ height: `${lines.length * 90}svh` }}>
+    <section ref={ref} aria-label="Manifeste" className="relative" style={{ height: `${100 + (lines.length - 1) * 35}svh` }}>
       <div className="sticky top-0 flex h-svh flex-col overflow-hidden transition-colors duration-700" style={{ background: scene.bg, color: scene.fg }}>
         <div className="mx-auto flex w-full max-w-[1440px] items-center justify-between px-5 pt-24 md:px-[72px] md:pt-28" style={{ color: scene.muted }}>
           <span className="label">Manifeste</span>
@@ -176,7 +177,7 @@ function Numbers() {
         <p className="label text-gris">En chiffres</p>
         <a href="/projets" className="border-b border-encre pb-0.5 text-[15px] font-medium transition-colors hover:border-bronze hover:text-bronze">Voir les projets →</a>
       </div>
-      <ul className="mt-10 grid border-t border-encre sm:grid-cols-3">
+      <ul data-reveal-stagger className="mt-10 grid border-t border-encre sm:grid-cols-3">
         {stats.map((s, i) => (
           <li key={s.label} className={`py-8 sm:py-10 ${i ? 'border-t border-pierre sm:border-l sm:border-t-0 sm:pl-8' : ''}`}>
             <span className="block text-[clamp(4.5rem,11vw,10rem)] font-extrabold leading-[0.85] tracking-[-0.06em]">
@@ -334,8 +335,8 @@ export default function StudioPage() {
   return (
     <>
       <Intro />
-      <Manifesto lines={studio.manifesto || []} />
       <Numbers />
+      <Manifesto lines={studio.manifesto || []} />
       <Story story={studio.story} />
       <Tools tools={studio.tools} />
       <Founder />

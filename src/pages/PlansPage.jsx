@@ -17,7 +17,7 @@ function Faq() {
           Avant de<br /><span className="text-gris">se lancer</span><Dot className="bg-bronze" />
         </h2>
       </div>
-      <ul className="border-b border-pierre">
+      <ul data-reveal-stagger className="border-b border-pierre">
         {faq.map((f, i) => {
           const isOpen = open === i
           return (

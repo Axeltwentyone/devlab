@@ -98,7 +98,7 @@ export default function ProjectPage({ id }) {
             </div>
           </div>
           {p.caseStudy.facts?.length > 0 && (
-            <ul className="mt-14 grid gap-px overflow-hidden rounded-3xl bg-pierre sm:grid-cols-2 lg:grid-cols-3">
+            <ul data-reveal-stagger className="mt-14 grid gap-px overflow-hidden rounded-3xl bg-pierre sm:grid-cols-2 lg:grid-cols-3">
               {p.caseStudy.facts.map((f, k) => (
                 <li key={f} className="flex items-baseline gap-4 bg-white p-6 md:p-8">
                   <span className="text-sm text-gris">{String(k + 1).padStart(2, '0')}</span>
@@ -115,7 +115,7 @@ export default function ProjectPage({ id }) {
         <section className="bg-fond">
           <div className="mx-auto max-w-[1440px] px-5 py-20 md:px-[72px] md:py-28">
             <p className="label text-gris">Pour qui</p>
-            <ul className="mt-8 grid gap-4 md:grid-cols-2">
+            <ul data-reveal-stagger className="mt-8 grid gap-4 md:grid-cols-2">
               {p.caseStudy.audience.map((a, k) => (
                 <li key={a.title} className="rounded-3xl bg-white p-7 md:p-10">
                   <span className="flex size-10 items-center justify-center rounded-full text-sm font-medium text-white" style={{ background: t.accent }}>{k + 1}</span>
@@ -135,7 +135,7 @@ export default function ProjectPage({ id }) {
           <h2 className="mt-4 text-[clamp(2.1rem,4.5vw,4rem)] font-extrabold leading-none tracking-[-0.045em]">
             Comment ça<br /><span className="text-gris">marche</span><Dot className="bg-bronze" />
           </h2>
-          <ol className="mt-14 flex flex-col gap-16 md:mt-20 md:gap-24">
+          <ol data-reveal-stagger className="mt-14 flex flex-col gap-16 md:mt-20 md:gap-24">
             {p.caseStudy.features.map((f, k) => (
               <li key={f.title} className="grid items-center gap-8 md:grid-cols-2 md:gap-16">
                 {f.image && (

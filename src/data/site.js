@@ -199,13 +199,11 @@ export const FAQ = [
 // Page « Le studio ». Le manifeste reprend ce que le site promet déjà ; l'histoire reste vide (section masquée)
 // tant qu'elle n'est pas écrite. TODO : valider le manifeste, écrire l'histoire, confirmer les outils.
 export const STUDIO = {
+  // 3 phrases : le manifeste se lit en un peu plus d'un écran
   manifesto: [
     'Un partenaire, pas un prestataire.',
-    'On conçoit avec vous, pas à votre place.',
-    'Le prix et la date sont fixés avant la première ligne de code.',
-    'On construit pour ici : les téléphones, les connexions et le Mobile Money de Côte d’Ivoire.',
-    'On livre ce qu’on a promis.',
-    'Et on reste.',
+    'On construit pour ici.',
+    'On livre ce qu’on a promis. Et on reste.',
   ],
   story: { title: 'Notre histoire', paragraphs: [] },
   tools: [

@@ -74,7 +74,7 @@ function ProjectList({ projects }) {
       onPointerMove={(e) => setPos({ x: e.clientX, y: e.clientY })}
       onPointerLeave={() => setHover(null)}
     >
-      <ul className="mx-auto max-w-[1440px] px-5 pb-20 md:px-[72px] md:pb-32">
+      <ul data-reveal-stagger className="mx-auto max-w-[1440px] px-5 pb-20 md:px-[72px] md:pb-32">
         {projects.map((p, i) => {
           const t = active?.theme
           const href = p.href || `/projets/${p.id.toLowerCase()}`
@@ -169,7 +169,7 @@ export default function ProjectsPage() {
       {view === 'liste' ? (
         <ProjectList projects={shown} />
       ) : (
-        <ul className="mx-auto grid max-w-[1440px] gap-4 px-5 pb-20 md:grid-cols-2 md:gap-5 md:px-[72px] md:pb-32">
+        <ul data-reveal-stagger className="mx-auto grid max-w-[1440px] gap-4 px-5 pb-20 md:grid-cols-2 md:gap-5 md:px-[72px] md:pb-32">
           {shown.map((p, i) => (
             <ProjectCard key={p.id} p={p} i={i} />
           ))}

@@ -9,6 +9,8 @@ import Closing from './components/Closing.jsx'
 import Cursor from './components/Cursor.jsx'
 import Loader, { introSeen } from './components/Loader.jsx'
 import { usePageTitle, useRouter } from './router.jsx'
+import { lockScroll } from './motion/scroll.js'
+import { useReveal } from './motion/reveal.jsx'
 import ProjectsPage from './pages/ProjectsPage.jsx'
 import ProjectPage from './pages/ProjectPage.jsx'
 import PlansPage from './pages/PlansPage.jsx'
@@ -44,12 +46,13 @@ function Page({ path }) {
 
 export default function App() {
   const { path } = useRouter()
+  useReveal()
   // Le site est monté quand le rideau commence à se lever, pour que l'animation du Hero se joue à ce moment-là
   const [revealed, setRevealed] = useState(introSeen)
   const [loading, setLoading] = useState(() => !introSeen())
 
   useEffect(() => {
-    document.documentElement.style.overflow = loading ? 'hidden' : ''
+    lockScroll(loading)
   }, [loading])
 
   return (

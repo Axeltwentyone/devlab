@@ -16,7 +16,7 @@ function Hours() {
     <div>
       <h2 className="text-[clamp(1.75rem,3vw,2.75rem)] font-extrabold leading-none tracking-[-0.045em]">Horaires<Dot className="bg-bronze" /></h2>
       <p className="mt-2 text-[15px] text-gris">Heure d’Abidjan. Vous pouvez écrire à tout moment, on répond dès l’ouverture.</p>
-      <ul className="mt-8 border-b border-pierre">
+      <ul data-reveal-stagger className="mt-8 border-b border-pierre">
         {DAYS.map(([d, label]) => {
           const isOpen = hours.days.includes(d)
           const today = d === day

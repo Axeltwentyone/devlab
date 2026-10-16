@@ -146,7 +146,7 @@ export default function Why() {
   const { reasons: REASONS } = useContent()
   return (
     <section id="pourquoi" className="mx-auto max-w-[1440px] px-5 pb-20 md:px-[72px] md:pb-32">
-      <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+      <div data-reveal className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="label text-gris">Pourquoi le lab ?</p>
           <h2 className="mt-4 max-w-4xl text-[clamp(2.1rem,5.3vw,4.75rem)] font-extrabold leading-none tracking-[-0.045em]">
@@ -160,7 +160,7 @@ export default function Why() {
         </div>
       </div>
 
-      <ul className="mt-12 grid gap-4 md:mt-16 md:grid-cols-12 md:gap-5">
+      <ul data-reveal-stagger className="mt-12 grid gap-4 md:mt-16 md:grid-cols-12 md:gap-5">
         {REASONS.map((r, i) => (
           <Card key={r.id} r={r} i={i} />
         ))}

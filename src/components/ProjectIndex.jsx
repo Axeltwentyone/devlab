@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Dot } from './Logo.jsx'
 import Phone from './Phone.jsx'
 import { useContent } from '../content/ContentContext.jsx'
+import { scrollToY } from '../motion/scroll.js'
 import { imageAlt, imageSrc } from '../content/images.js'
 // Un écran de projet : une capture dans un téléphone.
 export function Shot({ id, alt = imageAlt(id), className = '' }) {
@@ -189,6 +190,40 @@ function Panel({ p, i, active }) {
 
 // Mobile et tablette : même principe épinglé, pensé pour le pouce.
 // En haut des segments façon stories, au centre les écrans, en bas le projet et le lien vers son étude de cas.
+// Sortir de la section épinglée sans faire défiler tous les projets : remonter avant, ou passer après
+function Skip({ sectionRef, theme, className = '' }) {
+  const go = (where) => {
+    const el = sectionRef.current
+    if (!el) return
+    const top = el.getBoundingClientRect().top + window.scrollY
+    const target = where === 'up' ? Math.max(0, top - window.innerHeight * 0.75) : top + el.offsetHeight - 64
+    scrollToY(target)
+  }
+  const btn = 'flex h-9 items-center gap-1.5 rounded-full px-3.5 text-xs font-medium transition-[background-color,color] duration-300'
+  return (
+    <div className={`flex items-center gap-2 ${className}`}>
+      <button
+        type="button"
+        onClick={() => go('up')}
+        aria-label="Remonter avant les projets"
+        className={btn}
+        style={{ boxShadow: `inset 0 0 0 1px ${theme.line}`, color: theme.fg }}
+      >
+        <span aria-hidden="true">↑</span> Remonter
+      </button>
+      <button
+        type="button"
+        onClick={() => go('down')}
+        aria-label="Passer les projets"
+        className={btn}
+        style={{ background: theme.fg, color: theme.bg }}
+      >
+        Passer <span aria-hidden="true">↓</span>
+      </button>
+    </div>
+  )
+}
+
 function MobileStage() {
   const { projects: PROJECTS } = useContent()
   const ref = useRef(null)
@@ -200,7 +235,7 @@ function MobileStage() {
     const el = ref.current
     const scrollable = el.offsetHeight - window.innerHeight
     const top = el.getBoundingClientRect().top + window.scrollY
-    window.scrollTo({ top: top + (scrollable * (i + 0.5)) / PROJECTS.length, behavior: 'smooth' })
+    scrollToY(top + (scrollable * (i + 0.5)) / PROJECTS.length)
   }
 
   // Glisser à gauche / à droite sur les écrans : projet suivant / précédent
@@ -230,6 +265,7 @@ function MobileStage() {
             </h2>
             <span>{num(index)} / {num(PROJECTS.length - 1)}</span>
           </div>
+          <Skip sectionRef={ref} theme={t} className="mt-3 justify-end" />
           <div className="mt-3 flex gap-1.5">
             {PROJECTS.map((x, i) => {
               const fill = Math.min(1, Math.max(0, progress * PROJECTS.length - i))
@@ -389,7 +425,7 @@ export default function ProjectIndex() {
     const el = ref.current
     const scrollable = el.offsetHeight - window.innerHeight
     const top = el.getBoundingClientRect().top + window.scrollY
-    window.scrollTo({ top: top + (scrollable * (i + 0.5)) / PROJECTS.length, behavior: 'smooth' })
+    scrollToY(top + (scrollable * (i + 0.5)) / PROJECTS.length)
   }
 
   return (
@@ -423,6 +459,7 @@ export default function ProjectIndex() {
                   <span className="absolute inset-y-0 left-0" style={{ width: `${progress * 100}%`, background: t.accent }} />
                 </span>
               </div>
+              <Skip sectionRef={ref} theme={t} className="mt-4" />
             </div>
 
             <div className="relative">

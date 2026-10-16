@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Logo, { Mark } from './Logo.jsx'
 import { useWhatsapp } from '../content/ContentContext.jsx'
 import { useRouter } from '../router.jsx'
+import { lockScroll } from '../motion/scroll.js'
 
 // `page` : le lien est actif sur cette page (et ses sous-pages).
 // `spy` : sections de l'accueil qui l'activent quand on les fait défiler.
@@ -65,7 +66,7 @@ function useScrollState(path) {
 }
 
 // Le bouton rond : une croix qui tourne, et un anneau bronze qui suit la lecture de la page
-function Toggle({ open, progress, onClick }) {
+function Toggle({ open, hint, progress, onClick }) {
   const r = 30
   const c = 2 * Math.PI * r
   return (
@@ -85,7 +86,7 @@ function Toggle({ open, progress, onClick }) {
       <span
         aria-hidden="true"
         className="absolute transition-[transform,opacity] duration-700"
-        style={{ transform: `rotate(${open ? 135 : 0}deg) scale(${open ? 0.4 : 1})`, opacity: open ? 0 : 1, transitionTimingFunction: EASE }}
+        style={{ transform: `rotate(${open ? 135 : hint ? -25 : 0}deg) scale(${open ? 0.4 : hint ? 1.12 : 1})`, opacity: open ? 0 : 1, transitionTimingFunction: EASE }}
       >
         <Mark className="h-[22px] w-auto" ring="#F3F2EE" />
       </span>
@@ -107,6 +108,34 @@ export default function TopBar() {
   const { path } = useRouter()
   const { active, progress } = useScrollState(path)
   const [open, setOpen] = useState(false)
+  // « Menu » : au survol / au focus, et quelques secondes à l'arrivée sur un écran tactile
+  const [hover, setHover] = useState(false)
+  const [intro, setIntro] = useState(false)
+  useEffect(() => {
+    if (window.matchMedia('(hover: hover)').matches) return
+    setIntro(true)
+    const id = setTimeout(() => setIntro(false), 3500)
+    return () => clearTimeout(id)
+  }, [])
+  const hint = !open && (hover || intro)
+
+  // Grand écran avec souris : la barre se déplie au survol et se replie quand la souris s'en va
+  // (petit délai pour ne pas la refermer au moindre écart). Le clic marche toujours.
+  const leaveTimer = useRef(0)
+  const canHover = () => window.matchMedia('(min-width: 1024px) and (hover: hover) and (pointer: fine)').matches
+  const onEnter = (e) => {
+    if (e.pointerType !== 'mouse') return
+    clearTimeout(leaveTimer.current)
+    if (canHover()) setOpen(true)
+    else setHover(true)
+  }
+  const onLeave = (e) => {
+    setHover(false)
+    if (e.pointerType !== 'mouse' || !canHover()) return
+    clearTimeout(leaveTimer.current)
+    leaveTimer.current = setTimeout(() => setOpen(false), 280)
+  }
+  useEffect(() => () => clearTimeout(leaveTimer.current), [])
   const [hovered, setHovered] = useState(null)
   const [width, setWidth] = useState(64)
   const [mark, setMark] = useState(null)
@@ -150,8 +179,8 @@ export default function TopBar() {
   useEffect(() => {
     const mobile = window.matchMedia('(max-width: 1023px)').matches
     if (!open || !mobile) return
-    document.body.style.overflow = 'hidden'
-    return () => { document.body.style.overflow = '' }
+    lockScroll(true)
+    return () => lockScroll(false)
   }, [open])
 
   return (
@@ -171,10 +200,19 @@ export default function TopBar() {
       {/* La pastille : un rond qui s'ouvre en barre de navigation (grand écran) */}
       <div
         ref={pillRef}
-        className="fixed left-1/2 top-[max(12px,env(safe-area-inset-top))] z-50 flex h-16 -translate-x-1/2 items-center overflow-hidden rounded-full bg-encre text-white shadow-[0_12px_40px_rgba(17,17,17,0.28)] ring-1 ring-white/10 md:top-3"
-        style={{ width: open ? `min(${width}px, calc(100vw - 32px))` : 64, transition: `width .65s ${EASE}` }}
+        onPointerEnter={onEnter}
+        onPointerLeave={onLeave}
+        onFocus={() => setHover(true)}
+        onBlur={() => setHover(false)}
+        className="fixed left-1/2 top-[max(12px,env(safe-area-inset-top))] z-50 flex h-16 -translate-x-1/2 cursor-pointer items-center overflow-hidden rounded-full bg-encre text-white ring-1 ring-white/10 md:top-3"
+        style={{
+          width: open ? `min(${width}px, calc(100vw - 32px))` : 64,
+          scale: hint ? '1.08' : '1',
+          boxShadow: hint ? '0 16px 44px rgba(17,17,17,0.38), 0 0 0 6px rgba(169,119,74,0.18)' : '0 12px 40px rgba(17,17,17,0.28)',
+          transition: `width .65s ${EASE}, scale .45s ${EASE}, box-shadow .45s`,
+        }}
       >
-        <Toggle open={open} progress={progress} onClick={() => setOpen((o) => !o)} />
+        <Toggle open={open} hint={hint} progress={progress} onClick={() => setOpen((o) => !o)} />
 
         <nav
           id="navigation"
@@ -231,9 +269,23 @@ export default function TopBar() {
         </nav>
       </div>
 
+      {/* Étiquette « Menu » sous la pastille fermée */}
+      <span
+        aria-hidden="true"
+        className="label pointer-events-none fixed left-1/2 top-[calc(max(12px,env(safe-area-inset-top))+76px)] z-50 -translate-x-1/2 rounded-full bg-encre px-3 py-1.5 text-white md:top-[88px]"
+        style={{
+          opacity: hint ? 1 : 0,
+          translate: hint ? '-50% 0' : '-50% -6px',
+          transition: `opacity .3s, translate .45s ${EASE}`,
+        }}
+      >
+        Menu
+      </span>
+
       {/* Mobile et tablette : menu plein écran */}
       <div
         id="menu-mobile"
+        data-lenis-prevent
         aria-hidden={!open}
         className="fixed inset-0 z-40 flex flex-col bg-encre px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-28 text-white lg:hidden"
         style={{
