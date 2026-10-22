@@ -41,7 +41,7 @@ function useTrackProgress(ref) {
 function Chat({ on }) {
   return (
     <div className="flex flex-col gap-2 text-[13px]">
-      <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-[#D9FDD3] px-3 py-2 text-encre transition-all duration-500" style={{ opacity: on ? 1 : 0, translate: on ? '0 0' : '0 8px' }}>
+      <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-[#D9FDD3] dark:bg-[#1F4D3A] px-3 py-2 text-encre transition-all duration-500" style={{ opacity: on ? 1 : 0, translate: on ? '0 0' : '0 8px' }}>
         Bonjour theLab ! J’aimerais parler d’un projet.
         <span className="ml-2 text-[10px] text-[#53BDEB]">✓✓</span>
       </p>

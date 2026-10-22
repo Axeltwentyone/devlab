@@ -10,7 +10,7 @@ function BotBubble({ children, className = '' }) {
       <span aria-hidden="true" className="mb-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-encre text-[11px] font-extrabold text-white">
         t<span className="text-bronze">.</span>
       </span>
-      <div className={`rounded-2xl rounded-bl-md bg-white px-4 py-2.5 text-[15px] leading-snug text-encre shadow-[0_1px_0_rgba(17,17,17,0.06)] ${className}`}>
+      <div className={`rounded-2xl rounded-bl-md bg-white dark:bg-[#2A2825] px-4 py-2.5 text-[15px] leading-snug text-encre shadow-[0_1px_0_rgba(17,17,17,0.06)] ${className}`}>
         {children}
       </div>
     </div>
@@ -25,7 +25,7 @@ function UserBubble({ children, onEdit }) {
       title="Modifier cette réponse"
       className="chat-in group ml-auto flex max-w-[80%] flex-col items-end"
     >
-      <span className="rounded-2xl rounded-br-md bg-[#D9FDD3] px-4 py-2.5 text-left text-[15px] leading-snug text-encre">
+      <span className="rounded-2xl rounded-br-md bg-[#D9FDD3] dark:bg-[#1F4D3A] px-4 py-2.5 text-left text-[15px] leading-snug text-encre">
         {children} <span className="ml-1 text-[10px] text-[#53BDEB]">✓✓</span>
       </span>
       <span className="mt-1 text-[11px] text-gris opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">Modifier</span>
@@ -39,7 +39,7 @@ function Typing() {
       <span aria-hidden="true" className="flex size-7 items-center justify-center rounded-full bg-encre text-[11px] font-extrabold text-white">
         t<span className="text-bronze">.</span>
       </span>
-      <span className="flex gap-1 rounded-2xl rounded-bl-md bg-white px-4 py-3.5">
+      <span className="flex gap-1 rounded-2xl rounded-bl-md bg-white dark:bg-[#2A2825] px-4 py-3.5">
         {[0, 1, 2].map((k) => (
           <span key={k} className="typing-dot size-1.5 rounded-full bg-doux" style={{ animationDelay: `${k * 150}ms` }} />
         ))}
@@ -51,7 +51,7 @@ function Typing() {
 function Recommendation({ reco }) {
   if (!reco) return null
   return (
-    <div className="chat-in ml-9 max-w-[88%] rounded-2xl rounded-tl-md bg-encre p-5 text-white">
+    <div data-tone="dark" className="chat-in ml-9 max-w-[88%] rounded-2xl rounded-tl-md bg-encre p-5 text-white">
       <p className="text-xs font-medium text-doux">Notre recommandation</p>
       <h3 className="mt-2 text-[22px] font-extrabold leading-[1.1] tracking-[-0.03em]">
         {reco.title}<Dot className="bg-bronze" />
@@ -179,8 +179,8 @@ export default function Diagnostic({ page = false, onResult }) {
         </div>
 
         {/* La conversation */}
-        <div className="flex h-[min(640px,78svh)] flex-col overflow-hidden rounded-[28px] bg-[#EFEAE2] shadow-[0_40px_80px_-40px_rgba(17,17,17,0.4)] ring-1 ring-pierre">
-          <div className="flex items-center gap-3 bg-encre px-5 py-3.5 text-white">
+        <div className="flex h-[min(640px,78svh)] flex-col overflow-hidden rounded-[28px] bg-[#EFEAE2] dark:bg-[#1B1A17] shadow-[0_40px_80px_-40px_rgba(17,17,17,0.4)] ring-1 ring-pierre">
+          <div data-tone="dark" className="flex items-center gap-3 bg-encre px-5 py-3.5 text-white">
             <span className="flex size-9 items-center justify-center rounded-full bg-white text-sm font-extrabold text-encre">
               t<span className="text-bronze">.</span>
             </span>
@@ -215,7 +215,7 @@ export default function Diagnostic({ page = false, onResult }) {
           </div>
 
           {/* Zone de réponse : les choix, puis l'envoi */}
-          <div className="border-t border-black/5 bg-[#F6F3EE] p-3">
+          <div className="border-t border-black/5 bg-[#F6F3EE] dark:border-white/5 dark:bg-[#161513] p-3">
             {current && !typing && (
               <div role="radiogroup" aria-label={current.title} className="flex flex-wrap gap-2">
                 {current.options.map((o) => (
@@ -225,7 +225,7 @@ export default function Diagnostic({ page = false, onResult }) {
                     role="radio"
                     aria-checked={false}
                     onClick={() => choose(current.id, o.id)}
-                    className="chat-in rounded-full border border-pierre bg-white px-4 py-2.5 text-[14px] transition-colors hover:border-encre hover:bg-encre hover:text-white"
+                    className="chat-in rounded-full border border-pierre bg-white dark:bg-[#2A2825] px-4 py-2.5 text-[14px] transition-colors hover:border-encre hover:bg-encre hover:text-white"
                   >
                     {o.label}
                   </button>
@@ -240,7 +240,7 @@ export default function Diagnostic({ page = false, onResult }) {
                   onClick={recordLead}
                   target="_blank"
                   rel="noreferrer"
-                  className="chat-in flex items-center justify-center gap-2 rounded-full bg-[#25D366] py-3.5 text-[15px] font-medium text-encre transition-opacity hover:opacity-90"
+                  className="chat-in flex items-center justify-center gap-2 rounded-full bg-[#25D366] py-3.5 text-[15px] font-medium text-[#111] transition-opacity hover:opacity-90"
                 >
                   {justLooking ? 'Poser une question sur WhatsApp' : 'Envoyer ma demande sur WhatsApp'} <span aria-hidden="true">↗</span>
                 </a>

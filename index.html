@@ -6,6 +6,18 @@
     <title>theLab. — Studio web &amp; mobile à Abidjan</title>
     <meta name="description" content="theLab conçoit, livre et fait vivre des sites et applications pour les entreprises d'Abidjan et d'ailleurs." />
     <meta name="theme-color" content="#111111" />
+    <script>
+      // Mode sombre posé avant l'affichage (pas de flash) : choix enregistré, sinon réglage de l'appareil
+      try {
+        if (!location.pathname.startsWith('/admin')) {
+          var t = localStorage.getItem('thelab-theme')
+          if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#161513')
+          }
+        }
+      } catch (e) {}
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -16,6 +16,31 @@
   --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
+/* Mode sombre : on inverse les tokens (papier ↔ encre). Les surfaces marquées data-tone="dark"
+   (pastille, menu, pied de page, cadres de téléphone…) gardent les valeurs d'origine : elles restent noires. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+html.dark {
+  color-scheme: dark;
+  --color-white: #161513;
+  --color-fond: #1E1D1A;
+  --color-encre: #EEECE7;
+  --color-pierre: #33312D;
+  --color-gris: #9D998F;
+  --color-bronze: #BF8C5E;
+}
+html.dark [data-tone="dark"] {
+  --color-white: #FFFFFF;
+  --color-fond: #F3F2EE;
+  --color-encre: #0D0D0C;
+  --color-pierre: #D9D5CC;
+  --color-gris: #6E6B64;
+}
+html.dark * { scrollbar-color: rgb(238 236 231 / 0.25) transparent; }
+
+/* Bascule de thème : pas de fondu par défaut, le cercle est animé en JS */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+
 /* Mot d'accent : un seul mot en Instrument Serif dans un titre */
 @utility accent {
   font-family: var(--font-lab);

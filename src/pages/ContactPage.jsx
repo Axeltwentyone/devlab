@@ -25,7 +25,7 @@ function Hours() {
               <span className="flex items-center gap-3">
                 {label}
                 {today && (
-                  <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${open ? 'bg-[#DDF5E4] text-[#1B6B36]' : 'bg-fond text-gris'}`}>
+                  <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${open ? 'bg-[#DDF5E4] text-[#1B6B36] dark:bg-[#1F4D3A] dark:text-[#9BE3B1]' : 'bg-fond text-gris'}`}>
                     {open ? 'Ouvert maintenant' : 'Aujourd’hui'}
                   </span>
                 )}
@@ -43,7 +43,7 @@ export default function ContactPage() {
   usePageTitle('Contact')
   return (
     <>
-      <section className="bg-encre text-white">
+      <section data-tone="dark" className="bg-encre text-white">
         <div className="mx-auto max-w-[1440px] px-5 pb-16 pt-14 md:px-[72px] md:pb-24 md:pt-28">
           <p className="label text-doux">Contact</p>
           <h1 className="mt-4 text-[clamp(2.75rem,8vw,7.5rem)] font-extrabold leading-[0.92] tracking-[-0.05em]">

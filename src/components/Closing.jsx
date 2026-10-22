@@ -1,4 +1,5 @@
 import { Dot } from './Logo.jsx'
+import { ThemeToggle } from '../theme.jsx'
 import { useContent, useWhatsapp } from '../content/ContentContext.jsx'
 import useAbidjanClock from '../hooks/useAbidjanClock.js'
 import { scrollToY } from '../motion/scroll.js'
@@ -99,7 +100,7 @@ export default function Closing({ compact = false }) {
   const socials = contact.socials.filter((s) => s.href && s.href !== '#')
 
   return (
-    <footer id="contact" className="overflow-hidden bg-encre text-white">
+    <footer id="contact" data-tone="dark" className="overflow-hidden bg-encre text-white">
       <div className={`mx-auto max-w-[1440px] px-5 md:px-[72px] ${compact ? 'pt-14' : 'pt-20 md:pt-32'}`}>
         {!compact && (
           <>
@@ -126,6 +127,7 @@ export default function Closing({ compact = false }) {
             {contact.email && <a href={`mailto:${contact.email}`} className="transition-colors hover:text-white">{contact.email}</a>}
             <span>Abidjan, Côte d’Ivoire</span>
             <span>© {new Date().getFullYear()} theLab</span>
+            <ThemeToggle className="text-white" />
             <a href="#contenu" onClick={(e) => { e.preventDefault(); scrollToY(0) }} className="flex items-center gap-2 text-white transition-colors hover:text-bronze">
               Haut de page <span aria-hidden="true">↑</span>
             </a>

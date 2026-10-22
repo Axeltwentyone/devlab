@@ -65,6 +65,7 @@ export default function Loader({ onReveal, onDone }) {
       role="status"
       aria-label="Chargement"
       onClick={leave}
+      data-tone="dark"
       className={`loader fixed inset-0 z-[100] flex cursor-pointer items-center justify-center bg-encre px-6 text-fond ${leaving ? 'is-leaving' : ''}`}
     >
       <p

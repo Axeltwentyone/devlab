@@ -17,7 +17,7 @@ function VitrineArt() {
         <div className="mt-3 flex gap-1.5">
           <span className="h-1.5 w-full rounded bg-fond" /><span className="h-1.5 w-full rounded bg-fond" />
         </div>
-        <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-[#3BD16F] px-2 py-0.5 text-[9px] font-medium text-encre">WhatsApp</span>
+        <span className="mt-3 inline-flex items-center gap-1 rounded-full bg-[#3BD16F] px-2 py-0.5 text-[9px] font-medium text-[#111]">WhatsApp</span>
       </div>
     </div>
   )
@@ -39,7 +39,7 @@ function BoutiqueArt() {
         <span className="flex gap-1">
           <span className="rounded bg-[#1DC3F1] px-1.5 py-0.5 font-medium text-white">Wave</span>
           <span className="rounded bg-[#FF7900] px-1.5 py-0.5 font-medium text-white">OM</span>
-          <span className="rounded bg-[#FFCC00] px-1.5 py-0.5 font-medium text-encre">MoMo</span>
+          <span className="rounded bg-[#FFCC00] px-1.5 py-0.5 font-medium text-[#111]">MoMo</span>
         </span>
       </div>
     </div>
@@ -48,7 +48,7 @@ function BoutiqueArt() {
 
 function AppArt() {
   return (
-    <div className="aspect-[9/17] w-[34%] rounded-[1rem] bg-encre p-[3px] shadow-[0_18px_40px_-18px_rgba(17,17,17,0.5)] transition-transform duration-500 group-hover:-translate-y-1.5 group-hover:rotate-[-3deg]">
+    <div data-tone="dark" className="aspect-[9/17] w-[34%] rounded-[1rem] bg-encre p-[3px] shadow-[0_18px_40px_-18px_rgba(17,17,17,0.5)] transition-transform duration-500 group-hover:-translate-y-1.5 group-hover:rotate-[-3deg]">
       <div className="flex h-full flex-col gap-1.5 rounded-[0.8rem] bg-white p-2">
         <div className="h-1.5 w-1/2 rounded bg-encre" />
         <div className="h-8 rounded-md bg-encre" />

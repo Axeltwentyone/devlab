@@ -51,10 +51,10 @@ function ClockArt({ on }) {
 }
 
 function LocalArt({ on }) {
-  const pays = [['Wave', 'bg-[#1DC3F1] text-white'], ['Orange Money', 'bg-[#FF7900] text-white'], ['MoMo', 'bg-[#FFCC00] text-encre']]
+  const pays = [['Wave', 'bg-[#1DC3F1] text-white'], ['Orange Money', 'bg-[#FF7900] text-white'], ['MoMo', 'bg-[#FFCC00] text-[#111]']]
   return (
     <div className="relative h-40 w-32">
-      <div className="absolute inset-0 rounded-[1.4rem] bg-encre p-[4px] shadow-[0_24px_40px_-20px_rgba(17,17,17,0.6)]">
+      <div data-tone="dark" className="absolute inset-0 rounded-[1.4rem] bg-encre p-[4px] shadow-[0_24px_40px_-20px_rgba(17,17,17,0.6)]">
         <div className="flex h-full flex-col rounded-[1.15rem] bg-white p-2.5">
           <div className="flex items-center justify-between text-[8px] font-medium text-encre">
             <span>Abidjan</span>
@@ -124,6 +124,7 @@ function Card({ r, i }) {
     <li
       ref={ref}
       id={r.id ? `engagement-${r.id}` : undefined}
+      data-tone={dark ? 'dark' : undefined}
       className={`group flex min-h-[340px] flex-col justify-between gap-10 overflow-hidden rounded-3xl p-7 transition-transform duration-500 hover:-translate-y-1 md:min-h-[400px] md:p-9 ${span} ${
         dark ? 'bg-encre text-white' : 'bg-fond text-encre'
       }`}

@@ -215,7 +215,7 @@ function Tools({ tools }) {
   if (!tools?.length) return null
   const t = tools[Math.min(active, tools.length - 1)]
   return (
-    <section className="bg-encre text-white">
+    <section data-tone="dark" className="bg-encre text-white">
       <div className="mx-auto max-w-[1440px] px-5 py-20 md:px-[72px] md:py-28">
         <p className="label text-doux">Nos outils</p>
         <h2 className="mt-4 text-[clamp(2.1rem,4.5vw,4rem)] font-extrabold leading-none tracking-[-0.045em]">

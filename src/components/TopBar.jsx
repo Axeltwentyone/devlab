@@ -3,6 +3,7 @@ import Logo, { Mark } from './Logo.jsx'
 import { useWhatsapp } from '../content/ContentContext.jsx'
 import { useRouter } from '../router.jsx'
 import { lockScroll } from '../motion/scroll.js'
+import { ThemeToggle } from '../theme.jsx'
 
 // `page` : le lien est actif sur cette page (et ses sous-pages).
 // `spy` : sections de l'accueil qui l'activent quand on les fait défiler.
@@ -191,9 +192,12 @@ export default function TopBar() {
           <a href="/" aria-label="theLab. — accueil">
             <Logo mark className="text-[22px] md:text-2xl" />
           </a>
-          <p className="text-[13px] text-gris">
-            <span className="font-medium text-encre">Abidjan</span> <time>{time}</time>
-          </p>
+          <div className="flex items-center gap-3 md:gap-4">
+            <p className="text-[13px] text-gris">
+              <span className="font-medium text-encre max-[359px]:hidden">Abidjan </span><time>{time}</time>
+            </p>
+            <ThemeToggle className="text-encre" />
+          </div>
         </div>
       </header>
 
@@ -204,6 +208,7 @@ export default function TopBar() {
         onPointerLeave={onLeave}
         onFocus={() => setHover(true)}
         onBlur={() => setHover(false)}
+        data-tone="dark"
         className="fixed left-1/2 top-[max(12px,env(safe-area-inset-top))] z-50 flex h-16 -translate-x-1/2 cursor-pointer items-center overflow-hidden rounded-full bg-encre text-white ring-1 ring-white/10 md:top-3"
         style={{
           width: open ? `min(${width}px, calc(100vw - 32px))` : 64,
@@ -272,6 +277,7 @@ export default function TopBar() {
       {/* Étiquette « Menu » sous la pastille fermée */}
       <span
         aria-hidden="true"
+        data-tone="dark"
         className="label pointer-events-none fixed left-1/2 top-[calc(max(12px,env(safe-area-inset-top))+76px)] z-50 -translate-x-1/2 rounded-full bg-encre px-3 py-1.5 text-white md:top-[88px]"
         style={{
           opacity: hint ? 1 : 0,
@@ -287,6 +293,7 @@ export default function TopBar() {
         id="menu-mobile"
         data-lenis-prevent
         aria-hidden={!open}
+        data-tone="dark"
         className="fixed inset-0 z-40 flex flex-col bg-encre px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-28 text-white lg:hidden"
         style={{
           clipPath: open ? 'circle(150% at 50% 44px)' : 'circle(0px at 50% 44px)',
@@ -331,7 +338,10 @@ export default function TopBar() {
             <span className="size-2 rounded-full bg-[#3BD16F]" aria-hidden="true" />
             Écrire sur WhatsApp
           </a>
-          <p className="mt-4 text-center text-[13px] text-doux">Abidjan · {time}</p>
+          <div className="mt-4 flex items-center justify-center gap-3 text-[13px] text-doux">
+            <span>Abidjan · {time}</span>
+            <ThemeToggle className="text-white" tabIndex={open ? 0 : -1} />
+          </div>
         </div>
       </div>
     </>

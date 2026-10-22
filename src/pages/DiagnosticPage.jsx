@@ -24,8 +24,9 @@ function Outcomes({ match }) {
             <li
               key={key}
               id={`reco-${key}`}
+              data-tone={yours ? 'dark' : undefined}
               className={`relative flex flex-col rounded-3xl border p-6 transition-all duration-500 md:p-8 ${
-                yours ? 'border-encre bg-encre text-white shadow-[0_30px_60px_-30px_rgba(17,17,17,0.5)]' : match ? 'border-pierre opacity-50' : 'border-pierre'
+                yours ? 'border-encre bg-encre text-white dark:border-bronze shadow-[0_30px_60px_-30px_rgba(17,17,17,0.5)]' : match ? 'border-pierre opacity-50' : 'border-pierre'
               }`}
             >
               {yours && <span className="absolute right-5 top-5 rounded-full bg-bronze px-3 py-1 text-xs font-medium text-white">Pour vous</span>}

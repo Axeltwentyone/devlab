@@ -22,6 +22,7 @@ function Curtain({ phase }) {
   return (
     <div
       aria-hidden="true"
+      data-tone="dark"
       className="pointer-events-none fixed inset-0 z-[90] flex items-center justify-center bg-encre"
       style={{
         transform: `translateY(${y})`,
